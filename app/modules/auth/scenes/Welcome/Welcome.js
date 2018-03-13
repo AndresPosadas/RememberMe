@@ -21,7 +21,7 @@ class Welcome extends React.Component {
             <AuthContainer>
                 <View style={styles.container}>
                     <View style={styles.topContainer}>
-                        <Image style={styles.image} source={{uri: ""}}/>
+                        <Image style={styles.image} source={require("../../../../images/calendar.png")}/>
                         <Text style={styles.title}>RemindMe</Text>
                     </View>
 
