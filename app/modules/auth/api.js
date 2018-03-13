@@ -1,8 +1,9 @@
 import firebase from "../../config/firebase";
+var { Alert } = require('react-native');
 
 const auth = firebase.auth();
 const database = firebase.database();
-const provider = firebase.auth.FacebookAuthProvider;
+//const provider = firebase.auth.FacebookAuthProvider;
 
 //Register the user using email and password
 export function register(data, callback) {
@@ -14,9 +15,35 @@ export function register(data, callback) {
 
 //Create the user object in realtime database
 export function createUser (user, callback) {
-    database.ref('users').child(user.uid).update({ ...user })
-        .then(() => callback(true, null, null))
-        .catch((error) => callback(false, null, {message: error}));
+    database.ref('users').orderByChild("username").equalTo(user.username).once("value", (snapshot) => {
+        if(snapshot.val() == null){
+            var current = auth.currentUser;
+
+            current.updateProfile({ displayName: user.username, photoURL: user.photo })
+                .then(() => {
+                    database.ref('users').child(user.uid).update({ ...user })
+                        .then(() => callback(true, null, null))
+                        .catch((error) => callback(false, null, {message: error}));
+                }).catch((error) => callback(false, null, {message: error}));
+        }
+        else {
+            callback(false, null, {message: 'Username is already in use. Choose again.'});
+        }
+    });
+}
+
+//Check if username exists already
+export function checkName ( username ) {
+    database.ref('users').orderByChild("username").equalTo(username).once("value", function(snapshot) {
+        if(snapshot.val() == null){
+            Alert.alert('Is null', JSON.stringify(snapshot.val()));
+            return false;
+        }
+        else {
+            Alert.alert('Not null', JSON.stringify(snapshot.val()));
+            return true;
+        }
+    });
 }
 
 //Sign the user in with their email and password
@@ -29,18 +56,14 @@ export function login(data, callback) {
 
 //Get the user object from the realtime database
 export function getUser(user, callback) {
-    database.ref('users').child(user.uid).once('value')
-        .then(function(snapshot) {
 
-            const exists = (snapshot.val() !== null);
+    var current = auth.currentUser;
 
-            //if the user exist in the DB, replace the user variable with the returned snapshot
-            if (exists) user = snapshot.val();
+    const exists = ( current !== null );
 
-            const data = { exists, user }
-            callback(true, data, null);
-        })
-        .catch(error => callback(false, null, error));
+    const data = { exists, user };
+
+    callback( true, data, null );
 }
 
 //Send Password Reset Email

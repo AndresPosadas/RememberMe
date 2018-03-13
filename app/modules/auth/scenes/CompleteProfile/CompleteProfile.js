@@ -17,6 +17,15 @@ const fields = [
         secureTextEntry: false,
         value: "",
         type: "text"
+    },
+	{
+        key: 'photo',
+        label: "photo",
+        placeholder: "Photo URL",
+        autoFocus: false,
+        secureTextEntry: false,
+        value: "",
+        type: "text"
     }
 ];
 

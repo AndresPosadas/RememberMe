@@ -8,6 +8,10 @@ const styles = StyleSheet.create({
     container:{
         flex:1
     },
+	
+	title:{
+		fontSize: fontSize.large + 2
+	},
   
     bottomContainer:{
         backgroundColor:"white",
