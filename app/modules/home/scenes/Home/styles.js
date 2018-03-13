@@ -6,12 +6,28 @@ const resizeMode = 'contain';
 
 const styles = StyleSheet.create({
     container:{
-        flex:1
+        flex:1,
+        backgroundColor: 'white'
     },
 	
 	title:{
 		fontSize: fontSize.large + 2
-	},
+    },
+    
+    button:{
+        backgroundColor: "#FF553A",
+        height: normalize(55)
+    },
+
+    buttonText:{
+        fontSize: fontSize.regular + 2,
+        fontFamily: fontFamily.medium
+    },
+
+    containerView:{
+        width: windowWidth - 40,
+        marginTop: 10
+    },
   
     bottomContainer:{
         backgroundColor:"white",
@@ -22,12 +38,15 @@ const styles = StyleSheet.create({
         shadowOffset: {
             height: 1,
             width: 0
-        }
+        },
+	    position: 'absolute',
+	    bottom: 15,
+	    alignSelf: 'center'
     },
 
     buttonContainer:{
         justifyContent:"center",
-        alignItems:"center"
+        alignItems:"center",
     }
 });
 

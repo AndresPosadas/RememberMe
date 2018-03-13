@@ -47,22 +47,26 @@ class Home extends React.Component {
     render() {
         return (
             <View style={styles.container}>	
-				<Button
-                    raised
-                    borderRadius={4}
-                    title={'VIEW PROFILE'}
-                    containerViewStyle={[styles.containerView]}
-                    buttonStyle={[styles.button]}
-                    textStyle={styles.buttonText}
-                    onPress={this.viewProfile}/>
-                <Button
-                    raised
-                    borderRadius={4}
-                    title={'LOG OUT'}
-                    containerViewStyle={[styles.containerView]}
-                    buttonStyle={[styles.button]}
-                    textStyle={styles.buttonText}
-                    onPress={this.onSignOut}/>
+                <View style={styles.bottomContainer}>
+                    <View style={styles.buttonContainer}>
+                        <Button
+                            raised
+                            borderRadius={4}
+                            title={'VIEW PROFILE'}
+                            containerViewStyle={[styles.containerView]}
+                            buttonStyle={[styles.button]}
+                            textStyle={styles.buttonText}
+                            onPress={this.viewProfile}/>
+                        <Button
+                            raised
+                            borderRadius={4}
+                            title={'LOG OUT'}
+                            containerViewStyle={[styles.containerView]}
+                            buttonStyle={[styles.button]}
+                            textStyle={styles.buttonText}
+                            onPress={this.onSignOut}/>
+                    </View>
+                </View>
             </View>
         );
     }
