@@ -14,6 +14,7 @@ import ForgotPassword from '../modules/auth/scenes/ForgotPassword';
 import Home from '../modules/home/scenes/Home';
 import Profile from '../modules/home/scenes/Profile';
 import EditProfile from '../modules/home/scenes/EditProfile';
+import Timed from '../modules/home/scenes/Timed';
 
 //Import Store, actions
 import store from '../redux/store'
@@ -60,6 +61,7 @@ export default class extends React.Component {
                         <Scene key="Home" component={Home} title="Home" initial={true} type={ActionConst.REPLACE}/>
                         <Scene key="Profile" component={Profile} title="My Profile" back/>
                         <Scene key="EditProfile" component={EditProfile} title="Edit Profile" back/>
+                        <Scene key="Timed" component={Timed} title="Add Timed Reminder" back/>
                     </Stack>
                 </Scene>
             </Router>

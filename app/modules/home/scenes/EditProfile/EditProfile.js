@@ -1,10 +1,13 @@
 import React from 'react';
 var { View, StyleSheet, Alert, Text, TextInput, Image } = require('react-native');
 
-import { Button } from 'react-native-elements'
+import { Button } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import firebase from '../../../../config/firebase';
+import { actions as auth } from "../../index";
+
+const util = auth;
 
 const styles = require('./styles');
 const placeholderURL = 'https://thumbs.dreamstime.com/b/default-placeholder-profile-icon-avatar-gray-man-90197971.jpg';

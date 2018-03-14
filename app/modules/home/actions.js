@@ -12,3 +12,4 @@ export function signOut(successCB, errorCB) {
         });
     };
 }
+
