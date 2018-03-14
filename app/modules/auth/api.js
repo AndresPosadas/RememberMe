@@ -32,20 +32,6 @@ export function createUser (user, callback) {
     });
 }
 
-//Check if username exists already
-export function checkName ( username ) {
-    database.ref('users').orderByChild("username").equalTo(username).once("value", function(snapshot) {
-        if(snapshot.val() == null){
-            Alert.alert('Is null', JSON.stringify(snapshot.val()));
-            return false;
-        }
-        else {
-            Alert.alert('Not null', JSON.stringify(snapshot.val()));
-            return true;
-        }
-    });
-}
-
 //Sign the user in with their email and password
 export function login(data, callback) {
     const { email, password } = data;
