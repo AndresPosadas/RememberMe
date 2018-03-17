@@ -28,18 +28,27 @@ export function updateEmail(email) {
 }
 
 export function updateProfile(data, successCB, errorCB) {
-	exists('users', 'username', data.displayName)
+	
+	if(data.displayName) {
+		exists('users', 'username', data.displayName)
 		.then((snapshot) => {
 			if (snapshot.val() == null) {
 				user.updateProfile(data)
-					.then(() => successCB())
+					.then(() => successCB(data))
 					.catch((error) => errorCB(error));
 			} else {
 				errorCB({ message: 'That username is already in use.' });
 			}
 		})
 		.catch((error) => errorCB(error)
-	);
+		);
+	} 
+	
+	else {
+		user.updateProfile(data)
+			.then(() => successCB(data))
+			.catch((error) => errorCB(error));
+	}
 }
 
 export function appendToList(ref, toAppend, data, successCB, errorCB) {
