@@ -16,10 +16,6 @@ import Profile from '../modules/home/scenes/Profile';
 import EditProfile from '../modules/home/scenes/EditProfile';
 import Timed from '../modules/home/scenes/Timed';
 
-//Import Store, actions
-import store from '../redux/store'
-import { checkLoginStatus } from "../modules/auth/actions";
-
 import { fontFamily, normalize } from "../styles/theme";
 
 export default class extends React.Component {
@@ -27,15 +23,11 @@ export default class extends React.Component {
         super();
         this.state = {
             isReady: false,
-            isLoggedIn: false
         }
     }
 
     componentDidMount() {
-        let _this = this;
-        store.dispatch(checkLoginStatus((isLoggedIn) => {
-            _this.setState({isReady: true, isLoggedIn});
-        }));
+        this.setState({ isReady: true });
     }
 
     render() {

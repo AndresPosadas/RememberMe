@@ -1,13 +1,11 @@
 import React from 'react';
 
 import { Actions } from 'react-native-router-flux';
-import { connect } from 'react-redux';
 
-import { actions as auth } from "../../index"
-const { register } = auth;
+import { register } from '../../api';
 
-import Form from "../../components/Form"
-import AuthContainer from "../../components/AuthContainer"
+import Form from '../../components/Form';
+import AuthContainer from '../../components/AuthContainer';
 
 const fields = [
     {
@@ -61,7 +59,7 @@ class Register extends React.Component {
     onSubmit(data) {
         this.setState({error: error}); //clear out error messages
 
-        this.props.register(data, this.onSuccess, this.onError)
+        register(data, this.onSuccess, this.onError)
     }
 
     onSuccess(user) {
@@ -95,4 +93,4 @@ class Register extends React.Component {
     }
 }
 
-export default connect(null, { register })(Register);
+export default Register;

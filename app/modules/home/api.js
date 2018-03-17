@@ -1,13 +1,62 @@
-import firebase from "../../config/firebase";
+import firebase from '../../config/firebase';
 
-const auth = firebase.auth();
+auth = firebase.auth();
+database = firebase.database();
 
-export function signOut (callback) {
-    auth.signOut()
-        .then(() => {
-            if (callback) callback(true, null, null)
-        })
-        .catch((error) => {
-            if (callback) callback(false, null, error)
-        });
+export function authenticateUser(password) {
+	user = auth.currentUser;
+	email = user.email;
+	
+	credential = firebase.auth.EmailAuthProvider.credential(
+		email,
+		password
+	);
+
+	return user.reauthenticateWithCredential(credential);
+}
+
+export function signOut(successCB, errorCB) {
+	auth.signOut()
+		.then(() => successCB())
+		.catch((error) => errorCB(error)
+	);
+}
+
+export function updateEmail(email) {
+	user = auth.currentUser;
+	return user.updateEmail(email);
+}
+
+export function updateProfile(data, successCB, errorCB) {
+	exists('users', 'username', data.displayName)
+		.then((snapshot) => {
+			if (snapshot.val() == null) {
+				user.updateProfile(data)
+					.then(() => successCB())
+					.catch((error) => errorCB(error));
+			} else {
+				errorCB({ message: 'That username is already in use.' });
+			}
+		})
+		.catch((error) => errorCB(error)
+	);
+}
+
+export function appendToList(ref, toAppend, data, successCB, errorCB) {
+	insertReference = database.ref(ref + '/' + toAppend).push();
+	insertReference.set(data)
+		.then(() => successCB())
+		.catch((error) => errorCB(error)
+	);
+}
+export function update(ref, child, data, successCB, errorCB) {
+	database.ref(ref).child(child).update(data)
+		.then(() => successCB())
+		.catch((error) => {
+			errorCB(error);
+		});
+}
+
+export function exists(ref, child, item) {
+	return database.ref(ref).orderByChild(child).equalTo(item).once('value');
 }

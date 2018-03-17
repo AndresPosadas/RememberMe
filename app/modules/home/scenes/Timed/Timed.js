@@ -2,19 +2,15 @@ import React from 'react';
 import { Text, Alert } from 'react-native';
 
 import { Actions } from 'react-native-router-flux';
-import { connect } from 'react-redux';
 
-import { actions as stuff } from "../../index"
-const { login } = stuff;
-
-import styles from "./styles"
-
-import Form from "../../components/Form"
-import AuthContainer from "../../components/AuthContainer"
 import firebase from '../../../../config/firebase';
 
-const database = firebase.database();
-const auth = firebase.auth();
+import Form from "../../components/Form";
+import AuthContainer from "../../components/AuthContainer";
+
+import { appendToList } from '../../api';
+
+import styles from "./styles"
 
 const fields = [
 	{
@@ -80,27 +76,17 @@ class Timed extends React.Component {
 			error: error
 		}
 
-		this.onSubmit = this.onSubmit.bind(this);
-		this.onSuccess = this.onSuccess.bind(this);
-		this.onError = this.onError.bind(this);
-
 		this.user = firebase.auth().currentUser;
 	}
 
 	onSubmit(data) {
 		this.setState({ error: error }); //clear out error messages
-
-		database.ref('users/' + this.user.uid).child('reminders').push(data)
-			.then(() => {
-				this.onSuccess();
-			})
-			.catch((error) => {
-				this.onError(error);
-			});
+		appendToList('users/' + this.user.uid, 'reminders', data, this.onSuccess, this.onError);
 	}
 
 	// Return to home screen if reminder was created successfully
 	onSuccess() {
+		Alert.alert('Reminder set');
 		Actions.Main();
 	}
 
@@ -124,12 +110,13 @@ class Timed extends React.Component {
 			<AuthContainer>
 				<Form fields={fields}
 					showLabel={false}
-					onSubmit={this.onSubmit}
+					onSubmit={this.onSubmit.bind(this)}
 					buttonTitle={"ADD REMINDER"}
-					error={this.state.error} />
+					error={this.state.error} 
+				/>
 			</AuthContainer>
 		);
 	}
 }
 
-export default connect(null, null)(Timed);
+export default Timed;

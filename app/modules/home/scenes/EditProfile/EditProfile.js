@@ -1,41 +1,29 @@
 import React from 'react';
-var { View, StyleSheet, Alert, Text, TextInput, Image } = require('react-native');
-
+import { View, StyleSheet, Alert, Text, TextInput, Image } from 'react-native';
 import { Button } from 'react-native-elements';
+
 import { Actions } from 'react-native-router-flux';
-import { connect } from 'react-redux';
+
 import firebase from '../../../../config/firebase';
-import { actions as auth } from "../../index";
 
-const util = auth;
+import { authenticateUser, updateEmail, updateProfile, update } from '../../api';
+import { strcmp } from '../../utils/utils';
+import { validateEmail } from '../../utils/validate';
 
-const styles = require('./styles');
-const placeholderURL = 'https://thumbs.dreamstime.com/b/default-placeholder-profile-icon-avatar-gray-man-90197971.jpg';
+import styles from './styles';
+
+import { placeholderURL } from '../../constants';
 
 class EditProfile extends React.Component {
+	state = {
+		email: '',
+		username: '',
+		photoURL: placeholderURL,
+	};
 
 	constructor(props) {
-
 		super(props);
-
-		this.database = firebase.database();
-		this.auth = firebase.auth();
-
-		this.user = this.auth.currentUser;
-
-		this.newEmail = '';
-		this.newUsername = '';
-
-		this.state = {
-			email: '',
-			username: '',
-			photoURL: placeholderURL
-		};
-
-		this.newData = this.state;
-		this.password = '';
-
-		this.reauthenticate = this.reauthenticate.bind(this);
+		this.user = firebase.auth().currentUser;
 	}
 
 	// Note: this is fired after render has been called once
@@ -53,134 +41,90 @@ class EditProfile extends React.Component {
 		}
 	}
 
-	updateAuthTable(updateObj, successCB, errorCB) {
-		this.user.updateProfile(updateObj)
-			.then(() => {
-					this.updateUsersTable(updateObj, successCB, errorCB);
-			}).catch((error) => {
-				if (errorCB) {
-					errorCB(error.message);
-				}
-			});
-	}
-
-	updateUsersTable(updateObj, successCB, errorCB) {
-		var newUpdateObj = {};
-		if (updateObj.displayName) {
-			newUpdateObj['/username'] = updateObj.displayName;
-		}
-		if (updateObj.photoURL) {
-			newUpdateObj['/photoURL'] = updateObj.photoURL;
-		}
-		if (newUpdateObj !== {}) {
-			this.database.ref('users').child(this.user.uid).update(newUpdateObj)
-			.then(() => {
-				if (successCB){
-					successCB();
-				}
-			})
-			.catch((error) => {
-				if (errorCB){
-					errorCB(error.message);
-				}
-			});
-		}
-		return;
-	}
-
-	buildUpdateObj(isUsernameUpdated, successCB) {
-		var updateObj = {};
-		if (isUsernameUpdated) {
-			updateObj.displayName = this.newData.username;
-		}
-		if (this.newData.photoURL !== placeholderURL) {
-			updateObj.photoURL = this.newData.photoURL;
-		}
-
-		if (updateObj !== {}) {
-			this.updateAuthTable(updateObj, successCB, this.alertErrorMessage);
-		}
-	}
-
-	checkAndUpdateProfile() {
-		if (this.newData.username != '') {
-			this.database.ref('users').orderByChild("username").equalTo(this.newData.username).once("value", (snapshot) => {
-				if (snapshot.val() == null) {
-					this.buildUpdateObj(true, this.successfulUpdateWithNavigation);
-				} else {
-					Alert.alert('Uh-oh!', 'Username already in use. Please select another.');
-					this.buildUpdateObj(false, this.successfulUpdate);
-				}
-			});
-		} else {
-			this.buildUpdateObj(false, this.successfulUpdateWithNavigation);
-		}
-	}
-
-	successfulUpdate() {
-
-		Alert.alert('Profile updated');
-	}
-
-	successfulUpdateWithNavigation() {
-
-		Alert.alert('Profile updated');
+	onSuccess() {
+		Alert.alert('Profile updated.');
 		Actions.Profile();
 	}
 
-	alertErrorMessage(message) {
-		Alert.alert('Uh-oh!', message);
+	onError(error) {
+		Alert.alert('Something went wrong!', error.message);
 	}
 
-	// Updates the email if it changed
-	updateEmail() {
-		// If no changes were made to the email try to update the rest
-		if (this.newData.email == '') {
-			//Alert.alert('Email was not changed...');
-			this.checkAndUpdateProfile();
+	async onPress() {
+		if (!validateEmail(this.state.email)) {
+			this.onError({ message: 'Invalid email address' });
+			return;
 		}
-		else {
-			this.user.updateEmail(this.newData.email).then(() => {
-				//Alert.alert('Email updated');
-				this.checkAndUpdateProfile();
-			}).catch((error) => {
-				Alert.alert('Uh-oh!', error.message);
-			});
+
+		try {
+			const authenticated = await authenticateUser(this.state.password);
+		} catch (e) {
+			this.onError(e);
+			return;
+		}
+
+		const { email, username, photoURL } = this.state;
+
+		newEmail = strcmp(this.user.email, email);
+		
+		if (newEmail != 0) {
+			try {
+				const updatedEmail = await updateEmail(email);
+			} catch (e) {
+				this.onError(e);
+				return;
+			}
+		}
+
+		newUsername = strcmp(username, this.user.displayName);
+
+		if (newUsername != 0) {
+			this.updateDatabase = this.updateDatabase.bind(this);
+			updateProfile({ displayName: username, photoURL }, this.updateDatabase, this.onError);
+		} else {
+			this.updateDatabase();
 		}
 	}
 
-	// Validates user credentials
-	reauthenticate() {
-		var credentials = firebase.auth.EmailAuthProvider.credential(
-			this.user.email,
-			this.password
-		);
+	updateDatabase() {
+		const { email, username, photoURL } = this.state;
 
-		this.user.reauthenticateWithCredential(credentials)
-			.then(() => {
-				this.updateEmail();
-			}).catch((error) => {
-				Alert.alert('Uh-oh!', error.message);
-			});
+		update('users', 
+				this.user.uid, 
+				{ email, username, photoURL }, 
+				this.onSuccess,
+				this.onError
+			);
 	}
 
 	// Renders the user's profile
 	render() {
+		const { container, 
+				topContainer, 
+				titleText, 
+				passwordContainer, 
+				passwordText, 
+				bottomContainer,
+				buttonContainer,
+				containerView,
+				button,
+				buttonText 
+			} = styles;
 
 		return (
-			<View style={styles.container}>
-				<View style={styles.topContainer}>
-					<Text style={styles.titleText}>Email:</Text>
-					<TextInput placeholder={this.state.email} underlineColorAndroid="transparent" onChangeText={(text) => { this.newData.email = text }} />
-					<Text style={styles.titleText}>Username:</Text>
-					<TextInput placeholder={this.state.username} underlineColorAndroid="transparent" onChangeText={(text) => { this.newData.username = text }} />
-					<Text style={styles.titleText}>Photo URL:</Text>
-					<TextInput placeholder={this.state.photoURL} underlineColorAndroid="transparent" onChangeText={(text) => { this.newData.photoURL = text }} />
+			<View style={container}>
+				<View style={topContainer}>
+					<Text style={titleText}>Email:</Text>
+					<TextInput placeholder={this.state.email} underlineColorAndroid="transparent" onChangeText={(email) => this.setState({email})} />
+					<Text style={titleText}>Username:</Text>
+					<TextInput placeholder={this.state.username} underlineColorAndroid="transparent" onChangeText={(username) => this.setState({username})} />
+					<Text style={titleText}>Photo URL:</Text>
+					<TextInput placeholder={this.state.photoURL} underlineColorAndroid="transparent" onChangeText={(photoURL) => this.setState({photoURL})} />
 				</View>
 
-				<View style={styles.passwordContainer}>
-					<Text style={styles.passwordText}>Note: Re-enter password to authorize change(s).</Text>
-					<TextInput placeholder='Re-enter password here' underlineColorAndroid="transparent" onChangeText={(text) => { this.password = text }} />
+				<View style={passwordContainer}>
+					<Text style={passwordText}>Note: Re-enter password to authorize change(s).</Text>
+					<TextInput placeholder='Re-enter password here' underlineColorAndroid="transparent" onChangeText={(password) => this.setState({password})} />
 				</View>
 
 				<View style={styles.bottomContainer}>
@@ -192,12 +136,14 @@ class EditProfile extends React.Component {
 							containerViewStyle={[styles.containerView]}
 							buttonStyle={[styles.button]}
 							textStyle={styles.buttonText}
-							onPress={this.reauthenticate} />
+							onPress={this.onPress.bind(this)} 
+						/>
 					</View>
 				</View>
 			</View>
+
 		);
 	}
 }
 
-export default connect(null, null)(EditProfile);
+export default EditProfile;

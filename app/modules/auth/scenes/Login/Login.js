@@ -2,10 +2,8 @@ import React from 'react';
 import { Text } from 'react-native';
 
 import { Actions } from 'react-native-router-flux';
-import { connect } from 'react-redux';
 
-import { actions as auth } from "../../index"
-const { login } = auth;
+import { login } from '../../api'
 
 import styles from "./styles"
 
@@ -58,12 +56,11 @@ class Login extends React.Component {
     onSubmit(data) {
         this.setState({error: error}); //clear out error messages
 
-        this.props.login(data, this.onSuccess, this.onError)
+        login(data, this.onSuccess, this.onError);
     }
 
-    onSuccess({ exists, user}) {
-        if (exists) Actions.Main()
-        else Actions.CompleteProfile({ user })
+    onSuccess() {
+        Actions.Main()
     }
 
     onError(error) {
@@ -77,6 +74,7 @@ class Login extends React.Component {
                 errObj[key] = error[key];
             })
         }
+
         this.setState({error: errObj});
     }
 
@@ -94,4 +92,4 @@ class Login extends React.Component {
     }
 }
 
-export default connect(null, { login })(Login);
+export default Login;

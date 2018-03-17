@@ -1,71 +1,43 @@
-import firebase from "../../config/firebase";
-var { Alert } = require('react-native');
+import firebase from '../../config/firebase';
 
-const auth = firebase.auth();
-const database = firebase.database();
-//const provider = firebase.auth.FacebookAuthProvider;
+auth = firebase.auth();
+database = firebase.database();
 
-//Register the user using email and password
-export function register(data, callback) {
-    const { email, password } = data;
-    auth.createUserWithEmailAndPassword(email, password)
-        .then((user) => callback(true, user, null))
-        .catch((error) => callback(false, null, error));
+export function createUser(data, successCB, errorCB) {
+	database.ref('users').orderByChild('username').equalTo(data.username).once('value', (snapshot) => {
+		if (snapshot.val() == null) {
+			const currentUser = auth.currentUser;
+
+			currentUser.updateProfile({ username: data.username, photoURL: data.photo })
+				.then(() => {
+					database.ref('users').child(data.uid).update({ ...data })
+						.then(() => successCB())
+						.catch((error) => errorCB(error));
+				})
+				.catch((error) => errorCB(error));
+		} else {
+			errorCB({ message: 'Username is already in use. Choose again.'});
+		}
+	});
 }
 
-//Create the user object in realtime database
-export function createUser (user, callback) {
-    database.ref('users').orderByChild("username").equalTo(user.username).once("value", (snapshot) => {
-        if(snapshot.val() == null){
-            var current = auth.currentUser;
-
-            current.updateProfile({ displayName: user.username, photoURL: user.photo })
-                .then(() => {
-                    database.ref('users').child(user.uid).update({ ...user })
-                        .then(() => callback(true, null, null))
-                        .catch((error) => callback(false, null, {message: error}));
-                }).catch((error) => callback(false, null, {message: error}));
-        }
-        else {
-            callback(false, null, {message: 'Username is already in use. Choose again.'});
-        }
-    });
+export function login(data, successCB, errorCB) {
+	const { email, password } = data;
+	auth.signInWithEmailAndPassword(email, password)
+		.then((user) => successCB())
+		.catch((error) => errorCB(error));
 }
 
-//Sign the user in with their email and password
-export function login(data, callback) {
-    const { email, password } = data;
-    auth.signInWithEmailAndPassword(email, password)
-        .then((user) => getUser(user, callback))
-        .catch((error) => callback(false, null, error));
+export function register(data, successCB, errorCB) {
+	const { email, password } = data;
+	auth.createUserWithEmailAndPassword(email, password)
+		.then((user) => successCB(user))
+		.catch((error) => errorCB(error));
 }
 
-//Get the user object from the realtime database
-export function getUser(user, callback) {
-
-    var current = auth.currentUser;
-
-    const exists = ( current !== null );
-
-    const data = { exists, user };
-
-    callback( true, data, null );
-}
-
-//Send Password Reset Email
-export function resetPassword(data, callback) {
-    const { email } = data;
-    auth.sendPasswordResetEmail(email)
-        .then((user) => callback(true, null, null))
-        .catch((error) => callback(false, null, error));
-}
-
-export function signOut (callback) {
-    auth.signOut()
-        .then(() => {
-            if (callback) callback(true, null, null)
-        })
-        .catch((error) => {
-            if (callback) callback(false, null, error)
-        });
+export function resetPassword(data, successCB, errorCB) {
+	const { email } = data;
+	auth.sendPasswordResetEmail(email)
+		.then((user) => successCB())
+		.catch((error) => errorCB(error));
 }
