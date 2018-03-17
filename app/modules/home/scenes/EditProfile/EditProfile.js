@@ -10,35 +10,77 @@ import { authenticateUser, updateEmail, updateProfile, update } from '../../api'
 import { strcmp } from '../../utils/utils';
 import { validateEmail } from '../../utils/validate';
 
+import Form from "../../components/Form";
+import AuthContainer from "../../components/AuthContainer";
+
 import styles from './styles';
 
 import { placeholderURL } from '../../constants';
 
+const fields = [
+	{
+		key: 'email',
+		label: "Email",
+		placeholder: "new value or leave blank",
+		autoFocus: false,
+		secureTextEntry: false,
+		value: "",
+		type: "Email"
+	},
+	{
+		key: 'username',
+		label: "Username",
+		placeholder: "new value or leave blank",
+		autoFocus: false,
+		secureTextEntry: false,
+		value: "",
+		type: "username"
+	},
+	{
+		key: 'photoURL',
+		label: "Photo URL",
+		placeholder: "new value or leave blank.",
+		autoFocus: false,
+		secureTextEntry: false,
+		value: "",
+		type: "photoURL"
+	},
+	{
+		key: 'password',
+		label: "Password",
+		placeholder: "authorize change with password",
+		autoFocus: false,
+		secureTextEntry: true,
+		value: "",
+		type: "password"
+	}
+];
+
+const error = {
+	general: "",
+	email: "",
+	username: "",
+	photoURL: "",
+	password: ""
+};
+
 class EditProfile extends React.Component {
-	state = {
-		email: '',
-		username: '',
-		photoURL: placeholderURL,
-	};
 
 	constructor(props) {
+		
 		super(props);
+		
+		this.state = {
+			error: error
+		};
+		
 		this.user = firebase.auth().currentUser;
 	}
+	
+	onSubmit(data) {
+		this.setState({ error: error }); //clear out error messages
 
-	// Note: this is fired after render has been called once
-	componentDidMount() {
-		this.loadProfile();
-	}
-
-	loadProfile() {
-		if (this.user != null) {
-			this.setState({
-				email: this.user.email,
-				username: this.user.displayName,
-				photoURL: this.user.photoURL
-			});
-		}
+		this.reauthenticate(data);
 	}
 
 	onSuccess() {
@@ -50,98 +92,74 @@ class EditProfile extends React.Component {
 		Alert.alert('Something went wrong!', error.message);
 	}
 
-	async onPress() {
-		if (!validateEmail(this.state.email)) {
-			this.onError({ message: 'Invalid email address' });
-			return;
-		}
+	async onPress(data) {
 
 		try {
-			const authenticated = await authenticateUser(this.state.password);
+			const authenticated = await authenticateUser(data.password);
 		} catch (e) {
 			this.onError(e);
 			return;
 		}
 
-		const { email, username, photoURL } = this.state;
-
-		newEmail = strcmp(this.user.email, email);
+		newEmail = strcmp(this.user.email, data.email);
 		
-		if (newEmail != 0) {
+		if (newEmail !== 0 && data.email !== "") {
 			try {
-				const updatedEmail = await updateEmail(email);
+				const updatedEmail = await updateEmail(data.email);
 			} catch (e) {
 				this.onError(e);
 				return;
 			}
 		}
-
-		newUsername = strcmp(username, this.user.displayName);
-
-		if (newUsername != 0) {
-			this.updateDatabase = this.updateDatabase.bind(this);
-			updateProfile({ displayName: username, photoURL }, this.updateDatabase, this.onError);
-		} else {
-			this.updateDatabase();
+		
+		var updateObj = {};
+		
+		if (data.username !== "") {
+			updateObj.displayName = data.username;
 		}
+		
+		if(data.photoURL !== "") {
+			updateObj.photoURL = data.photoURL;
+		}
+		
+		if(updateObj !== {}) {
+			this.updateDatabase = this.updateDatabase.bind(this);
+			updateProfile(updateObj, this.updateDatabase, this.onError);			
+		}		
 	}
 
-	updateDatabase() {
-		const { email, username, photoURL } = this.state;
-
-		update('users', 
+	updateDatabase(updateObj) {
+		
+		var newUpdateObj = {};
+		
+		if(updateObj.displayName) {
+			newUpdateObj.username = updateObj.displayName;
+		}
+		if(updateObj.photoURL) {
+			newUpdateObj.photoURL = updateObj.photoURL;
+		}
+		
+		if(newUpdateObj !== {}) {
+			update('users', 
 				this.user.uid, 
-				{ email, username, photoURL }, 
+				newUpdateObj, 
 				this.onSuccess,
 				this.onError
 			);
+		}
 	}
 
 	// Renders the user's profile
 	render() {
-		const { container, 
-				topContainer, 
-				titleText, 
-				passwordContainer, 
-				passwordText, 
-				bottomContainer,
-				buttonContainer,
-				containerView,
-				button,
-				buttonText 
-			} = styles;
 
 		return (
-			<View style={container}>
-				<View style={topContainer}>
-					<Text style={titleText}>Email:</Text>
-					<TextInput placeholder={this.state.email} underlineColorAndroid="transparent" onChangeText={(email) => this.setState({email})} />
-					<Text style={titleText}>Username:</Text>
-					<TextInput placeholder={this.state.username} underlineColorAndroid="transparent" onChangeText={(username) => this.setState({username})} />
-					<Text style={titleText}>Photo URL:</Text>
-					<TextInput placeholder={this.state.photoURL} underlineColorAndroid="transparent" onChangeText={(photoURL) => this.setState({photoURL})} />
-				</View>
-
-				<View style={passwordContainer}>
-					<Text style={passwordText}>Note: Re-enter password to authorize change(s).</Text>
-					<TextInput placeholder='Re-enter password here' underlineColorAndroid="transparent" onChangeText={(password) => this.setState({password})} />
-				</View>
-
-				<View style={styles.bottomContainer}>
-					<View style={[styles.buttonContainer]}>
-						<Button
-							raised
-							borderRadius={4}
-							title={'SAVE CHANGES'}
-							containerViewStyle={[styles.containerView]}
-							buttonStyle={[styles.button]}
-							textStyle={styles.buttonText}
-							onPress={this.onPress.bind(this)} 
-						/>
-					</View>
-				</View>
-			</View>
-
+			<AuthContainer>
+				<Form fields={fields}
+					showLabel={true}
+					onSubmit={this.onPress.bind(this)}
+					buttonTitle={"SAVE CHANGES"}
+					error={this.state.error} />
+			</AuthContainer>
 		);
 	}
 }
