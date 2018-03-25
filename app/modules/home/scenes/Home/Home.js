@@ -41,7 +41,7 @@ class Home extends React.Component {
     }
 
     proximityReminder() {
-        Alert.alert('You tried to set a proximity reminder.');
+        Actions.AddProximity();
     }
 
     importReminders() {
