@@ -15,6 +15,7 @@ import Home from '../modules/home/scenes/Home';
 import Profile from '../modules/home/scenes/Profile';
 import EditProfile from '../modules/home/scenes/EditProfile';
 import Timed from '../modules/home/scenes/Timed';
+import AddProximity from '../modules/home/scenes/AddProximity';
 
 import { fontFamily, normalize } from "../styles/theme";
 
@@ -54,6 +55,7 @@ export default class extends React.Component {
                         <Scene key="Profile" component={Profile} title="My Profile" back/>
                         <Scene key="EditProfile" component={EditProfile} title="Edit Profile" back/>
                         <Scene key="Timed" component={Timed} title="Add Timed Reminder" back/>
+						<Scene key="AddProximity" component={AddProximity} title="Add Proximity Reminder" back/>
                     </Stack>
                 </Scene>
             </Router>
