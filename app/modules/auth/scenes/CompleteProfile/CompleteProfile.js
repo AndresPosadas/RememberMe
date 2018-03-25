@@ -1,12 +1,10 @@
 import React from 'react';
 import { Actions } from 'react-native-router-flux';
-import { connect } from 'react-redux';
 
-import { actions as auth } from "../../index"
-const { createUser } = auth;
+import { createUser } from '../../api';
 
-import Form from "../../components/Form"
-import AuthContainer from "../../components/AuthContainer"
+import Form from '../../components/Form';
+import AuthContainer from '../../components/AuthContainer';
 
 const fields = [
     {
@@ -53,7 +51,7 @@ class CompleteProfile extends React.Component {
         const { user } = this.props;
         data['uid'] = user.uid;
 
-        this.props.createUser(data, this.onSuccess, this.onError)
+        createUser(data, this.onSuccess, this.onError)
     }
 
     onSuccess() {
@@ -88,4 +86,4 @@ class CompleteProfile extends React.Component {
     }
 }
 
-export default connect(null, { createUser })(CompleteProfile);
+export default CompleteProfile;

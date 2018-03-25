@@ -3,15 +3,16 @@ var { View, StyleSheet, Alert, ScrollView, Text, ListView } = require('react-nat
 
 import { Button } from 'react-native-elements'
 import { Actions } from 'react-native-router-flux';
-import { connect } from 'react-redux';
+
 import firebase from "../../../../config/firebase";
 
 const ListItem = require("../../components/ListItem");
 
 import styles from "./styles"
 
-import { actions as auth, theme } from "../../../auth/index"
-const { signOut } = auth;
+import { signOut } from '../../api'
+
+import { theme } from "../../../auth/index"
 
 const { color } = theme;
 
@@ -23,7 +24,7 @@ class Home extends React.Component {
         this.state = {}
 
         this.onSignOut = this.onSignOut.bind(this);
-        this.viewProfile = this.viewProfile.bind(this);
+        // this.viewProfile = this.viewProfile.bind(this);
     }
 
     viewProfile() {
@@ -49,7 +50,7 @@ class Home extends React.Component {
 
     // Communicates with Firebase API...calls onSuccess if signout worked
     onSignOut() {
-        this.props.signOut(this.onSuccess.bind(this), this.onError.bind(this));
+        signOut(this.onSuccess.bind(this), this.onError.bind(this));
     }
 
     // Return to login screen
@@ -119,4 +120,4 @@ class Home extends React.Component {
     }
 }
 
-export default connect(null, { signOut })(Home);
+export default Home;

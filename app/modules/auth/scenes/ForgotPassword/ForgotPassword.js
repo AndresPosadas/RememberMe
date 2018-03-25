@@ -1,13 +1,11 @@
 import React from 'react';
 
 import { Actions } from 'react-native-router-flux';
-import { connect } from 'react-redux';
 
-import { actions as auth } from "../../index"
-const { resetPassword } = auth;
+import { resetPassword } from '../../api';
 
-import Form from "../../components/Form"
-import AuthContainer from "../../components/AuthContainer"
+import Form from "../../components/Form";
+import AuthContainer from "../../components/AuthContainer";
 
 const fields = [
     {
@@ -41,7 +39,7 @@ class ForgotPassword extends React.Component {
     onSubmit(data) {
         this.setState({error: error}); //clear out error messages
 
-        this.props.resetPassword(data, this.onSuccess, this.onError)
+        resetPassword(data, this.onSuccess, this.onError);
     }
 
     onSuccess() {
@@ -76,4 +74,4 @@ class ForgotPassword extends React.Component {
     }
 }
 
-export default connect(null, { resetPassword })(ForgotPassword);
+export default ForgotPassword;

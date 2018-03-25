@@ -3,7 +3,7 @@ var { View, StyleSheet, Alert, ScrollView, Text, ListView, TextInput, Image } = 
 
 import {Button} from 'react-native-elements'
 import {Actions} from 'react-native-router-flux';
-import {connect} from 'react-redux';
+
 import firebase from '../../../../config/firebase';
 
 const styles = require('./styles');
@@ -32,7 +32,7 @@ class Profile extends React.Component {
 				email: this.user.email,
 				username: this.user.displayName,
 				photoURL: this.user.photoURL
-			});			
+			});
 		}
 	}
 
@@ -47,6 +47,8 @@ class Profile extends React.Component {
 
 				<View style={styles.imageContainer}>
 					<Image
+						height='20'
+						width='30'
           				style={styles.image}
 						source={{uri: this.state.photoURL }}
 					/>
@@ -77,4 +79,4 @@ class Profile extends React.Component {
 	}
 }
 
-export default connect(null, null)(Profile);
+export default Profile;

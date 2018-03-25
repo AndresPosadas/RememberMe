@@ -32,7 +32,7 @@ export function validate(form) {
     keys.slice(0, length).map(field => {
         if (field !== "error"){
             var { type, value } = form[field];
-            if (isEmpty(value) && (type === 'title' || type === 'date' || type === 'time')){
+            if (isEmpty(value) && (type === 'title' || type === 'date' || type === 'time' || type === 'password')){
                 error[field] = 'Your ' + field + ' is required';
                 success = false;
             }else{
