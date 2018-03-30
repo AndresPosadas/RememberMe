@@ -142,6 +142,7 @@ dependencies {
     compile "com.facebook.react:react-native:+"  // From node_modules
 	compile project(':react-native-push-notification')
 	compile project(':react-native-vector-icons')
+	compile project(':react-native-background-timer')
     compile ('com.google.android.gms:play-services-gcm:8.1.0') {
         force = true;
     }

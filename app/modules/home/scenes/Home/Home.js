@@ -6,11 +6,12 @@ import { Actions } from 'react-native-router-flux';
 
 import firebase from "../../../../config/firebase";
 
-const ListItem = require("../../components/ListItem");
+import BackgroundTimer from 'react-native-background-timer';
+import { pushNotifications } from '../../../../../services';
 
 import styles from "./styles"
 
-import { signOut } from '../../api'
+import { signOut, exists } from '../../api'
 
 import { theme } from "../../../auth/index"
 
@@ -24,8 +25,32 @@ class Home extends React.Component {
         this.state = {}
 
         this.onSignOut = this.onSignOut.bind(this);
-        // this.viewProfile = this.viewProfile.bind(this);
     }
+	
+	componentDidMount() {
+		
+		this.intervalId = BackgroundTimer.setInterval(() => {
+			
+			exists('users/' + firebase.auth().currentUser.uid + '/reminders', 'date', '3/27/2018')
+			.then((snapshot) => {
+				if (snapshot.val() !== null) {
+					
+					snapshot.forEach((childSnapshot) => {
+						var value = childSnapshot.val();
+						pushNotifications.localNotification({reminderTitle: value.title, description: value.description, reminderType: 'timed'});
+					});
+					
+				} else {
+					pushNotifications.localNotification({reminderTitle: 'No dice.', description: JSON.stringify(snapshot.val()), reminderType: 'timed'});
+				}
+			}).catch((error) => Alert.alert('Uh-oh!', error.message));
+			
+		}, 10000);
+	}
+	
+	componentWillUnmount() {
+		BackgroundTimer.clearInterval(this.intervalId);
+	}
 
     viewProfile() {
         Actions.Profile();

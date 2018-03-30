@@ -69,3 +69,7 @@ export function update(ref, child, data, successCB, errorCB) {
 export function exists(ref, child, item) {
 	return database.ref(ref).orderByChild(child).equalTo(item).once('value');
 }
+
+export function getTimed(ref, child) {
+	return database.ref(ref).orderByChild(child);
+}
