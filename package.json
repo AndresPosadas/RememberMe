@@ -9,7 +9,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "firebase": "^4.10.1",
-    "moment": "^2.21.0",
+    "moment": "^2.22.0",
     "react": "16.2.0",
     "react-native": "0.53.3",
     "react-native-background-timer": "^2.0.1",

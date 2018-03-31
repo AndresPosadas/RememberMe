@@ -1,23 +1,13 @@
 import React from 'react';
 var { View, StyleSheet, Alert, ScrollView, Text, ListView } = require('react-native');
-
-import { Button } from 'react-native-elements'
+import { Button } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
-
-import firebase from "../../../../config/firebase";
-
-import BackgroundTimer from 'react-native-background-timer';
-import { pushNotifications } from '../../../../../services';
-
-import styles from "./styles"
-
-import { signOut, exists } from '../../api'
-
-import { theme } from "../../../auth/index"
+import { setTimer, clearTimer } from '../../utils/backgroundTimer';
+import styles from "./styles";
+import { signOut, exists } from '../../api';
+import { theme } from '../../../auth/index';
 
 const { color } = theme;
-
-const database = firebase.database();
 
 class Home extends React.Component {
     constructor() {
@@ -28,28 +18,13 @@ class Home extends React.Component {
     }
 	
 	componentDidMount() {
-		
-		this.intervalId = BackgroundTimer.setInterval(() => {
-			
-			exists('users/' + firebase.auth().currentUser.uid + '/reminders', 'date', '3/27/2018')
-			.then((snapshot) => {
-				if (snapshot.val() !== null) {
-					
-					snapshot.forEach((childSnapshot) => {
-						var value = childSnapshot.val();
-						pushNotifications.localNotification({reminderTitle: value.title, description: value.description, reminderType: 'timed'});
-					});
-					
-				} else {
-					pushNotifications.localNotification({reminderTitle: 'No dice.', description: JSON.stringify(snapshot.val()), reminderType: 'timed'});
-				}
-			}).catch((error) => Alert.alert('Uh-oh!', error.message));
-			
-		}, 10000);
+		// Sets the timer for polling firebase for timed reminders.
+		this.intervalId = setTimer();
 	}
 	
-	componentWillUnmount() {
-		BackgroundTimer.clearInterval(this.intervalId);
+	componentWillUnmount() {		
+		// Clears the timer when this component is unmounted.
+		clearTimer(this.intervalId);
 	}
 
     viewProfile() {
@@ -60,7 +35,7 @@ class Home extends React.Component {
         Alert.alert('You tried to view reminders.');
     }
 
-    // Navigates to the timed reminder screen
+    // Navigates to the timed reminder screen.
     timedReminder() {
         Actions.Timed();
     }
