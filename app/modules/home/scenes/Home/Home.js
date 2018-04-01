@@ -4,8 +4,6 @@ var { View, StyleSheet, Alert, ScrollView, Text, ListView } = require('react-nat
 import { Button } from 'react-native-elements'
 import { Actions } from 'react-native-router-flux';
 
-import firebase from "../../../../config/firebase";
-
 const ListItem = require("../../components/ListItem");
 
 import styles from "./styles"
@@ -16,8 +14,6 @@ import { theme } from "../../../auth/index"
 
 const { color } = theme;
 
-const database = firebase.database();
-
 class Home extends React.Component {
     constructor() {
         super();
@@ -25,6 +21,10 @@ class Home extends React.Component {
 
         this.onSignOut = this.onSignOut.bind(this);
         // this.viewProfile = this.viewProfile.bind(this);
+    }
+
+    viewMap() {
+        Actions.Map();
     }
 
     viewProfile() {
@@ -106,6 +106,14 @@ class Home extends React.Component {
                         buttonStyle={[styles.button]}
                         textStyle={styles.buttonText}
                         onPress={this.viewProfile} />
+                    <Button
+                        raised
+                        borderRadius={4}
+                        title={'VIEW MAP'}
+                        containerViewStyle={[styles.containerView]}
+                        buttonStyle={[styles.button]}
+                        textStyle={styles.buttonText}
+                        onPress={this.viewMap} />
                     <Button
                         raised
                         borderRadius={4}

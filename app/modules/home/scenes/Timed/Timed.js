@@ -10,8 +10,6 @@ import AuthContainer from "../../components/AuthContainer";
 
 import { appendToList } from '../../api';
 
-import styles from "./styles"
-
 const fields = [
 	{
 		key: 'title',
@@ -81,7 +79,7 @@ class Timed extends React.Component {
 
 	onSubmit(data) {
 		this.setState({ error: error }); //clear out error messages
-		appendToList('users/' + this.user.uid, 'reminders', data, this.onSuccess, this.onError);
+		appendToList('users/' + this.user.uid, 'reminders/timed', data, this.onSuccess, this.onError);
 	}
 
 	// Return to home screen if reminder was created successfully

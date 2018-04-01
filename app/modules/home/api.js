@@ -1,5 +1,7 @@
 import firebase from '../../config/firebase';
 
+import { isEmpty, stringObjectTogether, strcmp } from './utils/utils';
+
 auth = firebase.auth();
 database = firebase.database();
 
@@ -68,4 +70,22 @@ export function update(ref, child, data, successCB, errorCB) {
 
 export function exists(ref, child, item) {
 	return database.ref(ref).orderByChild(child).equalTo(item).once('value');
+}
+
+export function retrieve(url, method = 'GET', body: {}, headers: {}) {
+	config = { method: method };
+
+	if (strcmp(method, 'GET') == 0 || strcmp(method, 'HEAD')) {
+        url = url += '?' + stringObjectTogether(body, '=', '&');
+    } else {
+		if (!isEmpty(body)) {
+			config.body = body;
+		}
+	}
+
+	if (!isEmpty(headers)) {
+		config.headers = headers;
+	}
+
+	return fetch(url, config);
 }
