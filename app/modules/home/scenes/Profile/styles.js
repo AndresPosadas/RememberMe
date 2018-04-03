@@ -51,7 +51,7 @@ var styles = StyleSheet.create({
     fontWeight: "500"
   },
   button:{
-    backgroundColor: "#FF553A",
+    backgroundColor: "#2b8c91",
 		height: normalize(55)
   },
   containerView:{

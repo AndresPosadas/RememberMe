@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     },
     
     button:{
-        backgroundColor: "#FF553A",
+        backgroundColor: "#2b8c91",
         height: normalize(55)
     },
 
