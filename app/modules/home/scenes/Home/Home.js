@@ -1,8 +1,8 @@
 import React from 'react';
-var { View, StyleSheet, Alert, ScrollView, Text, ListView } = require('react-native');
+var { View, Alert, Platform } = require('react-native');
 import { Button } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
-import { setTimer, clearTimer } from '../../utils/backgroundTimer';
+import { setTimer, clearTimer, setTimerIOS, clearTimerIOS } from '../../utils/backgroundTimer';
 import styles from "./styles";
 import { signOut, exists } from '../../api';
 import { theme } from '../../../auth/index';
@@ -17,14 +17,20 @@ class Home extends React.Component {
         this.onSignOut = this.onSignOut.bind(this);
     }
 	
-	componentDidMount() {
-		// Sets the timer for polling firebase for timed reminders.
-		this.intervalId = setTimer();
+	componentDidMount() {		
+		if(Platform.OS === 'ios') {
+			setTimerIOS();
+		} else {
+			this.intervalId = setTimer();
+		}		
 	}
 	
-	componentWillUnmount() {		
-		// Clears the timer when this component is unmounted.
-		clearTimer(this.intervalId);
+	componentWillUnmount() {	
+		if(Platform.OS === 'ios') {
+			clearTimerIOS();
+		} else {
+			clearTimer(this.intervalId);
+		}
 	}
 
     viewProfile() {

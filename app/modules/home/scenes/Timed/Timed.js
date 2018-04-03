@@ -57,6 +57,15 @@ const fields = [
 		secureTextEntry: false,
 		value: "",
 		type: "time"
+	},
+	{
+		key: 'recurring',
+		label: "Recurring",
+		placeholder: "Recurring? yes/no",
+		autoFocus: false,
+		secureTextEntry: false,
+		value: "",
+		type: "recurring"
 	}
 ];
 
@@ -66,7 +75,8 @@ const error = {
 	description: "",
 	address: "",
 	date: "",
-	time: ""
+	time: "",
+	recurring: ""
 }
 
 class Timed extends React.Component {

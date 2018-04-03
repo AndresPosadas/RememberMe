@@ -70,6 +70,16 @@ export function exists(ref, child, item) {
 	return database.ref(ref).orderByChild(child).equalTo(item).once('value');
 }
 
-export function getTimed(ref, child) {
-	return database.ref(ref).orderByChild(child);
+export function deleteItem(ref, key) {
+	return ref.child(key).remove(() => {
+		console.log("Removed " + ref + "/" + key);
+	});
+}
+
+export function addToExpired(ref, toAppend, data, successCB, errorCB) {
+	insertReference = database.ref(ref + '/' + toAppend).push();
+	insertReference.set(data)
+		.then((data) => successCB(data))
+		.catch((error) => errorCB(error)
+	);
 }
