@@ -32,7 +32,10 @@ export function validate(form) {
     keys.slice(0, length).map(field => {
         if (field !== "error"){
             var { type, value } = form[field];
-            if (isEmpty(value) && (type === 'recurring' || type === 'title' || type === 'date' || type === 'time' || type === 'password')){
+			
+				console.log(JSON.stringify(form));
+			
+            if (isEmpty(value) && (type === 'amPm' || type === 'minute' || type === 'hour' || type === 'recurring' || type === 'title' || type === 'date' || type === 'time' || type === 'password')){
                 error[field] = field + ' is required';
                 success = false;
             }else{
@@ -47,10 +50,7 @@ export function validate(form) {
                 }else if (type === "confirm_password" && !confirmPassword(value, form["password"]['value'])) {
                     error[field] = 'Password does not match.';
                     success = false;
-                }else if (type === "recurring" && value.toLowerCase() !== "yes" && value.toLowerCase() !== "no") {
-					error[field] = 'Recurring must be set to yes or no.';
-                    success = false;
-				}
+                }
             }
         }
     });

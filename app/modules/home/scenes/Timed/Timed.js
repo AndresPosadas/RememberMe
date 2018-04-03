@@ -15,8 +15,8 @@ import styles from "./styles"
 const fields = [
 	{
 		key: 'title',
-		label: "Title",
-		placeholder: "Title",
+		label: "Reminder Title",
+		placeholder: "",
 		autoFocus: false,
 		secureTextEntry: false,
 		value: "",
@@ -25,7 +25,7 @@ const fields = [
 	{
 		key: 'description',
 		label: "Description",
-		placeholder: "Description",
+		placeholder: "",
 		autoFocus: false,
 		secureTextEntry: false,
 		value: "",
@@ -34,7 +34,7 @@ const fields = [
 	{
 		key: 'address',
 		label: "Address",
-		placeholder: "Address",
+		placeholder: "",
 		autoFocus: false,
 		secureTextEntry: false,
 		value: "",
@@ -43,29 +43,11 @@ const fields = [
 	{
 		key: 'date',
 		label: "Date",
-		placeholder: "Date",
+		placeholder: "",
 		autoFocus: false,
 		secureTextEntry: false,
 		value: "",
 		type: "date"
-	},
-	{
-		key: 'time',
-		label: "Time",
-		placeholder: "Time",
-		autoFocus: false,
-		secureTextEntry: false,
-		value: "",
-		type: "time"
-	},
-	{
-		key: 'recurring',
-		label: "Recurring",
-		placeholder: "Recurring? yes/no",
-		autoFocus: false,
-		secureTextEntry: false,
-		value: "",
-		type: "recurring"
 	}
 ];
 
@@ -76,7 +58,10 @@ const error = {
 	address: "",
 	date: "",
 	time: "",
-	recurring: ""
+	recurring: "",
+	hour: "",
+	minute: "",
+	amPm: ""
 }
 
 class Timed extends React.Component {
@@ -119,10 +104,11 @@ class Timed extends React.Component {
 		return (
 			<AuthContainer>
 				<Form fields={fields}
-					showLabel={false}
+					showLabel={true}
 					onSubmit={this.onSubmit.bind(this)}
 					buttonTitle={"ADD REMINDER"}
-					error={this.state.error} 
+					error={this.state.error}
+					showRecurring={true}
 				/>
 			</AuthContainer>
 		);

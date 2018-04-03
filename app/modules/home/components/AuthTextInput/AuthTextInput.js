@@ -1,11 +1,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types'
+import { theme } from "../../index"
+
 
 import { View } from 'react-native';
 
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import { isEmpty } from '../../utils/validate'
 import styles from "./styles"
+
+const  { color, padding, windowWidth, normalize, fontSize, fontFamily } = theme;
 
 class AuthTextInput extends Component {
     render() {
@@ -15,7 +19,7 @@ class AuthTextInput extends Component {
             <View style={styles.container}>
                 {
                     (showLabel) &&
-                    <FormLabel>{this.props.label}</FormLabel>
+                    <FormLabel labelStyle={styles.labelStyle}>{this.props.label}</FormLabel>
                 }
                 <FormInput
                     autoCapitalize='none'
