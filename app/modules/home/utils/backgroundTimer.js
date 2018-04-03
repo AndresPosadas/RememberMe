@@ -46,7 +46,7 @@ export function setTimer() {
 				
 						var diff = reminderTime.diff(curTime, 'seconds');
 				
-						if(diff <= 30 && diff > 0){
+						if(diff <= 30 && diff >= -30){
 							pushNotifications.localNotification({reminderTitle: value.title, description: value.description, reminderType: 'timed'});
 							childSnapshot.ref.remove()
 							.then( () => {
@@ -68,7 +68,7 @@ export function setTimer() {
 				
 			}).catch((error) => Alert.alert('Uh-oh!', error.message));
 			
-		}, 10000);
+		}, 15000);
 }
 
 export function setTimerIOS() {
@@ -110,7 +110,7 @@ export function setTimerIOS() {
 				
 						var diff = reminderTime.diff(curTime, 'seconds');
 				
-						if(diff <= 30 && diff > 0){
+						if(diff <= 30 && diff >= -30){
 							pushNotifications.localNotification({reminderTitle: value.title, description: value.description, reminderType: 'timed'});
 							childSnapshot.ref.remove()
 							.then( () => {
@@ -132,7 +132,7 @@ export function setTimerIOS() {
 				
 			}).catch((error) => Alert.alert('Uh-oh!', error.message));
 			
-		}, 10000);
+		}, 15000);
 }
 
 export function clearTimerIOS() {	
