@@ -7,6 +7,7 @@ function cacheFonts(fonts) {
 }
 
 pushNotifications.configure();
+console.disableYellowBox = true;
 
 export default class App extends Component {
     constructor() {
