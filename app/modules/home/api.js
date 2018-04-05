@@ -83,3 +83,7 @@ export function addToExpired(ref, toAppend, data, successCB, errorCB) {
 		.catch((error) => errorCB(error)
 	);
 }
+
+export function getAll(ref, successCB, errorCB) {
+	database.ref(ref).on('value', (snapshot) => successCB(snapshot), (error) => errorCB(error));
+}

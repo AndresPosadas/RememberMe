@@ -43,7 +43,27 @@ class Form extends React.Component {
     }
 
     onSubmit() {
-        const data = this.state;
+        var data = this.state;
+		
+		if(this.props.original) {
+			var original = this.props.original;		
+			var bits = original.time.split(/[\s:]+/)
+		
+			original["hour"] = bits[0];
+			original["minute"] = bits[1];
+			original["amPm"] = bits[2];
+		}
+		
+		if(this.props.isEditing && this.props.original) {
+			Object.keys(data).forEach((key) => {
+				if(isEmpty(data[key].value) && key !== "error") {
+					console.log("DATA1: " + JSON.stringify(key));
+					console.log("DATA2: " + JSON.stringify(this.props.original[key]));
+					data[key].value = this.props.original[key];
+				}
+			});
+		}
+		
         const result = validate(data);
 
         if (!result.success) this.setState({error: result.error});
@@ -61,9 +81,16 @@ class Form extends React.Component {
         });
 		
 		if(this.props.showRecurring==true){
-			retData["time"] = data.hour + ":" + data.minute + " " + data.amPm;
-			retData["recurring"] = data.recurring;
+			if(this.props.isEditing && this.props.original) {
+				retData["time"] = data.hour.value + ":" + data.minute.value + " " + data.amPm.value;
+				retData["recurring"] = data.recurring.value;
+			} else {
+				retData["time"] = data.hour + ":" + data.minute + " " + data.amPm;
+				retData["recurring"] = data.recurring;
+			}		
 		}
+		
+		console.log("RET " + JSON.stringify(retData));
 
         return retData;
     }

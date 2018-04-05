@@ -38,7 +38,7 @@ class Home extends React.Component {
     }
 
     viewReminders() {
-        Alert.alert('You tried to view reminders.');
+        Actions.ViewReminders();
     }
 
     // Navigates to the timed reminder screen.

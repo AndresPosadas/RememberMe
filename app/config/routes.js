@@ -15,6 +15,8 @@ import Home from '../modules/home/scenes/Home';
 import Profile from '../modules/home/scenes/Profile';
 import EditProfile from '../modules/home/scenes/EditProfile';
 import Timed from '../modules/home/scenes/Timed';
+import ViewReminders from '../modules/home/scenes/ViewReminders';
+import EditReminder from '../modules/home/scenes/EditReminder';
 
 import { fontFamily, normalize } from "../styles/theme";
 
@@ -54,6 +56,8 @@ export default class extends React.Component {
                         <Scene key="Profile" component={Profile} title="My Profile" back/>
                         <Scene key="EditProfile" component={EditProfile} title="Edit Profile" back/>
                         <Scene key="Timed" component={Timed} title="Add Timed Reminder" back/>
+						<Scene key="ViewReminders" component={ViewReminders} title="My Reminders" back/>
+						<Scene key="EditReminder" component={EditReminder} title="Edit Reminder" back/>
                     </Stack>
                 </Scene>
             </Router>
