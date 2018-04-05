@@ -6,11 +6,21 @@ import firebase from "../../../config/firebase";
 import { Platform, Alert } from 'react-native';
 
 const database = firebase.database();
+var flag = true;
 
 export function setTimer() {
 		
 		BackgroundTimer.setInterval(() => {
+			
+			if(firebase.auth().currentUser === null){
+				if(flag === true) {
+					pushNotifications.localNotification({reminderTitle: "Login required.", description: "Please sign in again to continue using RemindMe services.", reminderType: 'RemindMe'});
+				}
+				flag = false;
+			} else {
 				
+			flag = true;
+					
 			this.timedRef = 'users/' + firebase.auth().currentUser.uid + '/reminders/timed';
 			this.expiredRef = 'users/' + firebase.auth().currentUser.uid, 'reminders/expired';
 			
@@ -68,13 +78,23 @@ export function setTimer() {
 				
 			}).catch((error) => Alert.alert('Uh-oh!', error.message));
 			
+			}
 		}, 15000);
 }
 
 export function setTimerIOS() {
 	
 	BackgroundTimer.runBackgroundTimer(() => { 
+			
+			if(firebase.auth().currentUser === null){
+				if(flag === true) {
+					pushNotifications.localNotification({reminderTitle: "Login required.", description: "Please sign in again to continue using RemindMe services.", reminderType: 'RemindMe'});
+				}
+				flag = false;
+			} else {
 				
+			flag = true;
+					
 			this.timedRef = 'users/' + firebase.auth().currentUser.uid + '/reminders/timed';
 			this.expiredRef = 'users/' + firebase.auth().currentUser.uid, 'reminders/expired';
 			
@@ -132,6 +152,7 @@ export function setTimerIOS() {
 				
 			}).catch((error) => Alert.alert('Uh-oh!', error.message));
 			
+			}
 		}, 15000);
 }
 
