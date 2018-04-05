@@ -29,10 +29,13 @@ class Form extends React.Component {
         }
 
         state["error"] = error;
-		state["recurring"] = {type: "recurring", value: ""};
-		state["hour"] = {type: "hour", value: ""};
-		state["minute"] = {type: "minute", value: ""};
-		state["amPm"] = {type: "amPm", value: ""};
+		
+		if(this.props.showRecurring==true){
+			state["recurring"] = {type: "recurring", value: ""};
+			state["hour"] = {type: "hour", value: ""};
+			state["minute"] = {type: "minute", value: ""};
+			state["amPm"] = {type: "amPm", value: ""};
+		}
 
         this.state = state;
 
@@ -57,8 +60,10 @@ class Form extends React.Component {
             }
         });
 		
-		retData["time"] = data.hour + ":" + data.minute + " " + data.amPm;
-		retData["recurring"] = data.recurring;
+		if(this.props.showRecurring==true){
+			retData["time"] = data.hour + ":" + data.minute + " " + data.amPm;
+			retData["recurring"] = data.recurring;
+		}
 
         return retData;
     }
@@ -183,7 +188,7 @@ class Form extends React.Component {
                     raised
                     title={buttonTitle}
                     borderRadius={4}
-                    containerViewStyle={styles.buttonContainer}
+                    containerViewStyle={styles.containerView}
                     buttonStyle={styles.button}
                     textStyle={styles.buttonText}
                     onPress={this.onSubmit}/>
@@ -218,7 +223,7 @@ class Form extends React.Component {
                     raised
                     title={buttonTitle}
                     borderRadius={4}
-                    containerViewStyle={styles.buttonContainer}
+                    containerViewStyle={styles.containerView}
                     buttonStyle={styles.button}
                     textStyle={styles.buttonText}
                     onPress={this.onSubmit}/>

@@ -11,7 +11,7 @@ const fields = [
     {
         key:'email',
         label: "Email Address",
-        placeholder:"Email",
+        placeholder:"",
         autoFocus:false,
         secureTextEntry:false,
         value: "",
@@ -66,6 +66,7 @@ class ForgotPassword extends React.Component {
         return (
             <AuthContainer>
                 <Form fields={fields}
+					  showLabel={true}
                       onSubmit={this.onSubmit}
                       buttonTitle={"SUBMIT"}
                       error={this.state.error}/>

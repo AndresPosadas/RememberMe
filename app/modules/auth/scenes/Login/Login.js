@@ -1,20 +1,16 @@
 import React from 'react';
 import { Text } from 'react-native';
-
 import { Actions } from 'react-native-router-flux';
-
-import { login } from '../../api'
-
-import styles from "./styles"
-
-import Form from "../../components/Form"
-import AuthContainer from "../../components/AuthContainer"
+import { login } from '../../api';
+import styles from "./styles";
+import Form from "../../components/Form";
+import AuthContainer from "../../components/AuthContainer";
 
 const fields = [
     {
         key: 'email',
         label: "Email Address",
-        placeholder: "Email Address",
+        placeholder: "",
         autoFocus: false,
         secureTextEntry: false,
         value: "",
@@ -23,7 +19,7 @@ const fields = [
     {
         key: 'password',
         label: "Password",
-        placeholder: "Password",
+        placeholder: "",
         autoFocus: false,
         secureTextEntry: true,
         value: "",
@@ -82,7 +78,7 @@ class Login extends React.Component {
         return (
             <AuthContainer>
                 <Form fields={fields}
-                      showLabel={false}
+                      showLabel={true}
                       onSubmit={this.onSubmit}
                       buttonTitle={"LOG IN"}
                       error={this.state.error}/>

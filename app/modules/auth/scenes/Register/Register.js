@@ -11,7 +11,7 @@ const fields = [
     {
         key: 'email',
         label: "Email Address",
-        placeholder: "Email Address",
+        placeholder: "",
         autoFocus: false,
         secureTextEntry: false,
         value: "",
@@ -20,7 +20,7 @@ const fields = [
     {
         key: 'password',
         label: "Password",
-        placeholder: "Password",
+        placeholder: "",
         autoFocus: false,
         secureTextEntry: true,
         value: "",
@@ -29,7 +29,7 @@ const fields = [
     {
         key: 'confirm_password',
         label: "Confirm Password",
-        placeholder: "Confirm Password",
+        placeholder: "",
         autoFocus: false,
         secureTextEntry: true,
         value: "",
@@ -84,7 +84,7 @@ class Register extends React.Component {
         return (
             <AuthContainer>
                 <Form fields={fields}
-                      showLabel={false}
+                      showLabel={true}
                       onSubmit={this.onSubmit}
                       buttonTitle={"SIGN UP"}
                       error={this.state.error}/>

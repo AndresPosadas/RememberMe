@@ -10,7 +10,7 @@ const fields = [
     {
         key: 'username',
         label: "Username",
-        placeholder: "Username",
+        placeholder: "",
         autoFocus: false,
         secureTextEntry: false,
         value: "",
@@ -18,8 +18,8 @@ const fields = [
     },
 	{
         key: 'photo',
-        label: "photo",
-        placeholder: "Photo URL",
+        label: "Photo URL",
+        placeholder: "",
         autoFocus: false,
         secureTextEntry: false,
         value: "",
@@ -77,7 +77,7 @@ class CompleteProfile extends React.Component {
         return (
             <AuthContainer>
                 <Form fields={fields}
-                      showLabel={false}
+                      showLabel={true}
                       onSubmit={this.onSubmit}
                       buttonTitle={"CONTINUE"}
                       error={this.state.error}/>

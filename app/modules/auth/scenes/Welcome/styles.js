@@ -63,13 +63,6 @@ const styles = StyleSheet.create({
         width: windowWidth - 40
     },
 
-    socialButton:{
-        height: normalize(55),
-        borderRadius:4,
-        marginTop:0,
-        marginBottom:0
-    },
-
     button:{
         backgroundColor: "#2b8c91",
         height: normalize(55)
