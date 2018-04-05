@@ -8,7 +8,6 @@ var styles = StyleSheet.create({
   container: {
     backgroundColor:"white",
 	borderBottomWidth: 1,
-	borderTopWidth: 1,
 	borderColor: "gray",
 	flexDirection: "row"
   },
