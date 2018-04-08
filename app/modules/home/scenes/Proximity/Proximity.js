@@ -113,6 +113,8 @@ class Proximity extends React.Component {
                 results = JSON.parse(res._bodyInit).results;
                 data.latitude = results[0].geometry.location.lat;
                 data.longitude = results[0].geometry.location.lng;
+				data.type = 'proximity';
+				console.log("TYYYYYYYYYYYYYYYYYYYPE: " + data.type);
                 
                 appendToList('users/' + this.user.uid, 'reminders/proximity', data, this.onSuccess, this.onError);
             }).catch((err) => {

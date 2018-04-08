@@ -89,6 +89,10 @@ export function getAll(ref, successCB, errorCB) {
 	database.ref(ref).on('value', (snapshot) => successCB(snapshot), (error) => errorCB(error));
 }
 
+export function getProxReminders(ref, successCB, errorCB, curLat, curLon) {
+	database.ref(ref).on('value', (snapshot) => successCB(snapshot, curLat, curLon), (error) => errorCB(error));
+}
+
 export function retrieve(url, method = 'GET', body: {}, headers: {}) {
 	config = { method: method };
 

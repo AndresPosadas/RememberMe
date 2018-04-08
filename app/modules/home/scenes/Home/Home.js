@@ -33,10 +33,6 @@ class Home extends React.Component {
 		}
 	}
 	
-	viewMap() {
-        Actions.Map();
-    }
-
     viewProfile() {
         Actions.Profile();
     }
@@ -51,7 +47,7 @@ class Home extends React.Component {
     }
 
     proximityReminder() {
-        Alert.alert('You tried to set a proximity reminder.');
+        Actions.Map();
     }
 
     importReminders() {
@@ -116,14 +112,6 @@ class Home extends React.Component {
                         buttonStyle={[styles.button]}
                         textStyle={styles.buttonText}
                         onPress={this.viewProfile} />
-					<Button
-                        raised
-                        borderRadius={4}
-                        title={'VIEW MAP'}
-                        containerViewStyle={[styles.containerView]}
-                        buttonStyle={[styles.button]}
-                        textStyle={styles.buttonText}
-                        onPress={this.viewMap} />
                     <Button
                         raised
                         borderRadius={4}
