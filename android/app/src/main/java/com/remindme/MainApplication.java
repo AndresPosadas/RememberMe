@@ -1,6 +1,7 @@
 package com.remindme;
 
 import android.app.Application;
+import com.airbnb.android.react.maps.MapsPackage;
 
 import com.facebook.react.ReactApplication;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -29,7 +30,8 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new VectorIconsPackage(),
             new ReactNativePushNotificationPackage(),
-            new BackgroundTimerPackage()
+            new BackgroundTimerPackage(),
+			new MapsPackage()
       );
     }
 

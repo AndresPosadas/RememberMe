@@ -143,7 +143,17 @@ dependencies {
 	compile project(':react-native-push-notification')
 	compile project(':react-native-vector-icons')
 	compile project(':react-native-background-timer')
-    compile ('com.google.android.gms:play-services-gcm:8.1.0') {
+    compile ('com.google.android.gms:play-services-gcm:10.0.1') {
+        force = true;
+    }
+	compile(project(':react-native-maps')){
+        exclude group: 'com.google.android.gms', module: 'play-services-base'
+        exclude group: 'com.google.android.gms', module: 'play-services-maps'
+    }
+	compile ('com.google.android.gms:play-services-base:10.0.1') {
+        force = true;
+    }
+	compile ('com.google.android.gms:play-services-maps:10.0.1') {
         force = true;
     }
 }

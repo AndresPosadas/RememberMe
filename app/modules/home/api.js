@@ -1,4 +1,5 @@
 import firebase from '../../config/firebase';
+import { isEmpty, stringObjectTogether, strcmp } from './utils/utils';
 
 auth = firebase.auth();
 database = firebase.database();
@@ -86,4 +87,22 @@ export function addToExpired(ref, data, successCB, errorCB) {
 
 export function getAll(ref, successCB, errorCB) {
 	database.ref(ref).on('value', (snapshot) => successCB(snapshot), (error) => errorCB(error));
+}
+
+export function retrieve(url, method = 'GET', body: {}, headers: {}) {
+	config = { method: method };
+
+	if (strcmp(method, 'GET') == 0 || strcmp(method, 'HEAD')) {
+        url = url += '?' + stringObjectTogether(body, '=', '&');
+    } else {
+		if (!isEmpty(body)) {
+			config.body = body;
+		}
+	}
+
+	if (!isEmpty(headers)) {
+		config.headers = headers;
+	}
+
+	return fetch(url, config);
 }
