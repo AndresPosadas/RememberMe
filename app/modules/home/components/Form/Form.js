@@ -57,8 +57,8 @@ class Form extends React.Component {
 		if(this.props.isEditing && this.props.original) {
 			Object.keys(data).forEach((key) => {
 				if(isEmpty(data[key].value) && key !== "error") {
-					console.log("DATA1: " + JSON.stringify(key));
-					console.log("DATA2: " + JSON.stringify(this.props.original[key]));
+					//console.log("DATA1: " + JSON.stringify(key));
+					//console.log("DATA2: " + JSON.stringify(this.props.original[key]));
 					data[key].value = this.props.original[key];
 				}
 			});
@@ -80,14 +80,26 @@ class Form extends React.Component {
             }
         });
 		
+		console.log("RETDATA: " + JSON.stringify(retData));
+		
+		Object.keys(data).forEach(function(key) {
+            console.log("DATA: " + JSON.stringify(data[key]));
+        });
+		
+		//console.log("DATA: " + JSON.stringify(data));
+		
 		if(this.props.showRecurring==true){
-			if(this.props.isEditing && this.props.original) {
+			if(data.hour.value) {
 				retData["time"] = data.hour.value + ":" + data.minute.value + " " + data.amPm.value;
-				retData["recurring"] = data.recurring.value;
 			} else {
 				retData["time"] = data.hour + ":" + data.minute + " " + data.amPm;
+			}
+
+			if(data.recurring.value){
+				retData["recurring"] = data.recurring.value;
+			} else {
 				retData["recurring"] = data.recurring;
-			}		
+			}
 		}
 		
 		console.log("RET " + JSON.stringify(retData));

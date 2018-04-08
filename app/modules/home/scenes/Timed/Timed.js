@@ -71,6 +71,7 @@ class Timed extends React.Component {
 
 	onSubmit(data) {
 		this.setState({ error: error }); //clear out error messages
+		data.type = 'timed';
 		appendToList("users/" + this.user.uid, "reminders/timed", data, this.onSuccess, this.onError);
 	}
 

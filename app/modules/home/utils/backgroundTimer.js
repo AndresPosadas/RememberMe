@@ -9,6 +9,8 @@ const database = firebase.database();
 var flag = true;
 
 export function setTimer() {
+	
+	console.log("Timer set.");
 		
 		BackgroundTimer.setInterval(() => {
 			
@@ -21,8 +23,8 @@ export function setTimer() {
 				
 			flag = true;
 					
-			this.timedRef = 'users/' + firebase.auth().currentUser.uid + '/reminders/timed';
-			this.expiredRef = 'users/' + firebase.auth().currentUser.uid, 'reminders/expired';
+			this.timedRef = 'users/' + firebase.auth().currentUser.uid;
+			this.expiredRef = 'users/' + firebase.auth().currentUser.uid + '/reminders/expired';
 			
 			// Gets current day
 			this.currentdate = new Date(); 
@@ -31,8 +33,10 @@ export function setTimer() {
 							+ this.currentdate.getDate();
 							
 			this.dateString = moment(this.dateString, 'YYYY-MM-DD').format('MM/DD/YYYY');
+			
+			console.log("DATE: " + this.dateString);
 	
-			exists(timedRef, 'date', this.dateString)
+			exists(timedRef + '/reminders/timed', 'date', this.dateString)
 			.then((snapshot) => {
 		
 				if (snapshot.val() !== null) {
@@ -47,22 +51,28 @@ export function setTimer() {
 					snapshot.forEach((childSnapshot) => {
 				
 						var value = childSnapshot.val();
-						var potentialDate = moment(value.date, 'MM/DD/YYYY').add(7, 'days');
+						var potentialDate = moment(value.date, 'MM/DD/YYYY');
+						potentialDate = moment(potentialDate, 'MM/DD/YYYY').add(7, 'days');
 						var potentialValue = value;
 						potentialValue.date = potentialDate.format('MM/DD/YYYY');
+						potentialValue.type = 'timed';
 				
 						var reminderTime = moment(value.time, 'hh:mm a');
 						var curTime = moment(this.timeString, 'HH:mm:ss');
 				
 						var diff = reminderTime.diff(curTime, 'seconds');
+						
+						console.log("DIFF: " + diff);
 				
 						if(diff <= 30 && diff >= -30){
 							pushNotifications.localNotification({reminderTitle: value.title, description: value.description, reminderType: 'timed'});
+							value.type = 'expired';
 							childSnapshot.ref.remove()
 							.then( () => {
-								addToExpired(expiredRef, value, (data) => {
+								value.type = 'expired';
+								addToExpired(this.expiredRef, value, (data) => {
 									if(value.recurring === 'yes') {
-										appendToList(timedRef, potentialValue, () => {
+										appendToList(this.timedRef, 'reminders/timed', potentialValue, () => {
 											console.log("Recurring reminder set.");
 										}, (error) => Alert.alert( 'Uh-oh!', error.message ))
 									} else {
@@ -105,6 +115,8 @@ export function setTimerIOS() {
 							+ this.currentdate.getDate();
 							
 			this.dateString = moment(this.dateString, 'YYYY-MM-DD').format('MM/DD/YYYY');
+			
+			console.log("DATE: " + this.dateString);
 	
 			exists(timedRef, 'date', this.dateString)
 			.then((snapshot) => {
@@ -129,6 +141,8 @@ export function setTimerIOS() {
 						var curTime = moment(this.timeString, 'HH:mm:ss');
 				
 						var diff = reminderTime.diff(curTime, 'seconds');
+						
+						console.log("DIFF: " + diff);
 				
 						if(diff <= 30 && diff >= -30){
 							pushNotifications.localNotification({reminderTitle: value.title, description: value.description, reminderType: 'timed'});
@@ -162,4 +176,5 @@ export function clearTimerIOS() {
 
 export function clearTimer(timerID) {	
 	BackgroundTimer.clearInterval(timerID);
+	console.log("Timer cleared.");
 }

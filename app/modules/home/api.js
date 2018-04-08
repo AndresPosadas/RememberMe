@@ -76,8 +76,8 @@ export function deleteItem(ref, key) {
 	});
 }
 
-export function addToExpired(ref, toAppend, data, successCB, errorCB) {
-	insertReference = database.ref(ref + '/' + toAppend).push();
+export function addToExpired(ref, data, successCB, errorCB) {
+	insertReference = database.ref(ref).push();
 	insertReference.set(data)
 		.then((data) => successCB(data))
 		.catch((error) => errorCB(error)

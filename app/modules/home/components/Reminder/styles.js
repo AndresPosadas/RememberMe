@@ -12,6 +12,13 @@ var styles = StyleSheet.create({
 	flexDirection: "row"
   },
   
+  expiredContainer: {
+    backgroundColor:"white",
+	borderBottomWidth: 1,
+	borderColor: "gray",
+	flexDirection: "row"
+  },
+  
   containerView:{
     marginVertical: padding,
     width: 110,
@@ -21,6 +28,11 @@ var styles = StyleSheet.create({
   
   textContainer: {
     width: windowWidth - 110
+  },
+  
+  expiredTextContainer: {
+    width: windowWidth - 110,
+	backgroundColor: "#F0F0F0"
   },
   
   reminderText: {
@@ -38,6 +50,13 @@ var styles = StyleSheet.create({
     alignItems:"center",
 	width: 100,
 	backgroundColor: "white"
+  },
+  
+  expiredButtonContainer:{
+    justifyContent:"center",
+    alignItems:"center",
+	width: 100,
+	backgroundColor: "#F0F0F0"
   },
   
   buttonText:{

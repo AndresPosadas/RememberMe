@@ -35,7 +35,66 @@ class Reminder extends React.Component {
 
 	render() {
 		var reminder = this.props.item.val();
-		return (
+		
+		if(reminder.type === 'expired') {
+			
+			return (
+			<View style={styles.container}>
+				<View style={styles.expiredTextContainer}>
+					<View style={{flexDirection: "row"}}>
+						<Text style={styles.reminderText}>Title: </Text>
+						<Text style={styles.reminderText}>{reminder.title}</Text>
+					</View>
+					<View style={{flexDirection: "row"}}>
+						<Text style={styles.reminderText}>Body: </Text>
+						<Text style={styles.reminderText}>{reminder.description}</Text>
+					</View>
+					{
+						(!!reminder.date) &&
+						<View style={{flexDirection: "row"}}>
+							<Text style={styles.reminderText}>Date: </Text>
+							<Text style={styles.reminderText}>{reminder.date}</Text>
+						</View>
+					}
+					{
+						(!!reminder.time) &&
+						<View style={{flexDirection: "row"}}>
+							<Text style={styles.reminderText}>Time: </Text>
+							<Text style={styles.reminderText}>{reminder.time}</Text>
+						</View>
+					}
+					{
+						(!!reminder.recurring) &&
+						<View style={{flexDirection: "row"}}>
+							<Text style={styles.reminderText}>Recurring: </Text>
+							<Text style={styles.reminderText}>{reminder.recurring}</Text>
+						</View>
+					}
+				</View>
+				<View style={styles.expiredButtonContainer}>
+					<Button
+						raised
+						title={"EDIT"}
+						borderRadius={4}
+						containerViewStyle={styles.containerView}
+						buttonStyle={styles.button}
+						textStyle={styles.buttonText}
+						onPress={this.onEdit.bind(this)}/>
+					<Button
+						raised
+						title={"DELETE"}
+						borderRadius={4}
+						containerViewStyle={styles.containerView}
+						buttonStyle={styles.button}
+						textStyle={styles.buttonText}
+						onPress={this.onDelete.bind(this)}/>
+				</View>
+			</View>
+			);
+			
+		} else {
+			
+			return (
 			<View style={styles.container}>
 				<View style={styles.textContainer}>
 					<View style={{flexDirection: "row"}}>
@@ -88,6 +147,7 @@ class Reminder extends React.Component {
 				</View>
 			</View>
 		);
+		}
 	}
 }
 

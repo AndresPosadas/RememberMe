@@ -59,7 +59,7 @@ const error = {
 	amPm: ""
 }
 
-class Timed extends React.Component {
+class EditReminder extends React.Component {
 	constructor() {
 		super();
 		this.state = {
@@ -70,30 +70,20 @@ class Timed extends React.Component {
 	}
 
 	onSubmit(data) {
-		this.setState({ error: error }); //clear out error messages
-		this.props.reminder.ref.remove();
-		appendToList("users/" + this.user.uid, "reminders/timed", data, this.onSuccess, this.onError);
+		this.props.reminder.ref.update(data)
+		.then(() => this.onSuccess())
+		.catch(() => this.onError);
 	}
 
 	// Return to home screen if reminder was created successfully
 	onSuccess() {
 		Alert.alert("Reminder Updated");
-		Actions.ViewReminders();
+		Actions.pop();
 	}
 
 	// Display errors
 	onError(error) {
-		let errObj = this.state.error;
-
-		if (error.hasOwnProperty("message")) {
-			errObj["general"] = error.message;
-		} else {
-			let keys = Object.keys(error);
-			keys.map((key, index) => {
-				errObj[key] = error[key];
-			})
-		}
-		this.setState({ error: errObj });
+		Alert.alert("Uh-oh!", error.message);
 	}
 
 	render() {
@@ -115,4 +105,4 @@ class Timed extends React.Component {
 	}
 }
 
-export default Timed;
+export default EditReminder;
