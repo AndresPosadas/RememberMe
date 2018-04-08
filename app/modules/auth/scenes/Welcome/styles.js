@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
         paddingBottom: padding * 2,
         justifyContent:"center",
         alignItems:"center",
-        backgroundColor: "#FF553F",
+        backgroundColor: "#2b8c91",
     },
 
     image:{
@@ -63,15 +63,8 @@ const styles = StyleSheet.create({
         width: windowWidth - 40
     },
 
-    socialButton:{
-        height: normalize(55),
-        borderRadius:4,
-        marginTop:0,
-        marginBottom:0
-    },
-
     button:{
-        backgroundColor: "#FF553F",
+        backgroundColor: "#2b8c91",
         height: normalize(55)
     },
 
@@ -96,7 +89,7 @@ const styles = StyleSheet.create({
 
     signInText:{
         fontSize: fontSize.regular,
-        color: "#FF553F",
+        color: "#3ad0d8",
         fontFamily: fontFamily.medium
     },
 

@@ -1,22 +1,13 @@
 import React from 'react';
-var { View, StyleSheet, Alert, ScrollView, Text, ListView } = require('react-native');
-
-import { Button } from 'react-native-elements'
+var { View, Alert, Platform } = require('react-native');
+import { Button } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
-
-import firebase from "../../../../config/firebase";
-
-const ListItem = require("../../components/ListItem");
-
-import styles from "./styles"
-
-import { signOut } from '../../api'
-
-import { theme } from "../../../auth/index"
+import { setTimer, clearTimer, setTimerIOS, clearTimerIOS } from '../../utils/backgroundTimer';
+import styles from "./styles";
+import { signOut, exists } from '../../api';
+import { theme } from '../../../auth/index';
 
 const { color } = theme;
-
-const database = firebase.database();
 
 class Home extends React.Component {
     constructor() {
@@ -24,24 +15,39 @@ class Home extends React.Component {
         this.state = {}
 
         this.onSignOut = this.onSignOut.bind(this);
-        // this.viewProfile = this.viewProfile.bind(this);
     }
-
+	
+	componentDidMount() {		
+		if(Platform.OS === 'ios') {
+			setTimerIOS();
+		} else {
+			this.intervalId = setTimer();
+		}		
+	}
+	
+	componentWillUnmount() {	
+		if(Platform.OS === 'ios') {
+			clearTimerIOS();
+		} else {
+			clearTimer(this.intervalId);
+		}
+	}
+	
     viewProfile() {
         Actions.Profile();
     }
 
     viewReminders() {
-        Alert.alert('You tried to view reminders.');
+        Actions.ViewReminders();
     }
 
-    // Navigates to the timed reminder screen
+    // Navigates to the timed reminder screen.
     timedReminder() {
         Actions.Timed();
     }
 
     proximityReminder() {
-        Alert.alert('You tried to set a proximity reminder.');
+        Actions.Map();
     }
 
     importReminders() {

@@ -1,62 +1,48 @@
-import React from 'react';
-import { Text, Alert } from 'react-native';
-
-import { Actions } from 'react-native-router-flux';
-
-import firebase from '../../../../config/firebase';
-
+import React from "react";
+import { Text, Alert, ScrollView } from "react-native";
+import { Actions } from "react-native-router-flux";
+import firebase from "../../../../config/firebase";
 import Form from "../../components/Form";
 import AuthContainer from "../../components/AuthContainer";
-
-import { appendToList } from '../../api';
-
-import styles from "./styles"
+import { appendToList } from "../../api";
+import styles from "./styles";
 
 const fields = [
 	{
-		key: 'title',
-		label: "Title",
-		placeholder: "Title",
+		key: "title",
+		label: "Reminder Title",
+		placeholder: "",
 		autoFocus: false,
 		secureTextEntry: false,
 		value: "",
 		type: "title"
 	},
 	{
-		key: 'description',
+		key: "description",
 		label: "Description",
-		placeholder: "Description",
+		placeholder: "",
 		autoFocus: false,
 		secureTextEntry: false,
 		value: "",
 		type: "description"
 	},
 	{
-		key: 'address',
+		key: "address",
 		label: "Address",
-		placeholder: "Address",
+		placeholder: "",
 		autoFocus: false,
 		secureTextEntry: false,
 		value: "",
 		type: "address"
 	},
 	{
-		key: 'date',
+		key: "date",
 		label: "Date",
-		placeholder: "Date",
+		placeholder: "",
 		autoFocus: false,
 		secureTextEntry: false,
 		value: "",
 		type: "date"
-	},
-	{
-		key: 'time',
-		label: "Time",
-		placeholder: "Time",
-		autoFocus: false,
-		secureTextEntry: false,
-		value: "",
-		type: "time"
 	}
 ];
 
@@ -66,7 +52,11 @@ const error = {
 	description: "",
 	address: "",
 	date: "",
-	time: ""
+	time: "",
+	recurring: "",
+	hour: "",
+	minute: "",
+	amPm: ""
 }
 
 class Timed extends React.Component {
@@ -81,12 +71,13 @@ class Timed extends React.Component {
 
 	onSubmit(data) {
 		this.setState({ error: error }); //clear out error messages
-		appendToList('users/' + this.user.uid, 'reminders', data, this.onSuccess, this.onError);
+		data.type = 'timed';
+		appendToList("users/" + this.user.uid, "reminders/timed", data, this.onSuccess, this.onError);
 	}
 
 	// Return to home screen if reminder was created successfully
 	onSuccess() {
-		Alert.alert('Reminder set');
+		Alert.alert("Reminder set");
 		Actions.Main();
 	}
 
@@ -95,7 +86,7 @@ class Timed extends React.Component {
 		let errObj = this.state.error;
 
 		if (error.hasOwnProperty("message")) {
-			errObj['general'] = error.message;
+			errObj["general"] = error.message;
 		} else {
 			let keys = Object.keys(error);
 			keys.map((key, index) => {
@@ -107,14 +98,17 @@ class Timed extends React.Component {
 
 	render() {
 		return (
-			<AuthContainer>
-				<Form fields={fields}
-					showLabel={false}
-					onSubmit={this.onSubmit.bind(this)}
-					buttonTitle={"ADD REMINDER"}
-					error={this.state.error} 
-				/>
-			</AuthContainer>
+			<ScrollView>
+				<AuthContainer>
+					<Form fields={fields}
+						showLabel={true}
+						onSubmit={this.onSubmit.bind(this)}
+						buttonTitle={"ADD REMINDER"}
+						error={this.state.error}
+						showRecurring={true}
+					/>
+				</AuthContainer>
+			</ScrollView>
 		);
 	}
 }

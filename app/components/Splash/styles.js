@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         fontSize:fontSize.large + 5,
         lineHeight:fontSize.large + 7,
         fontFamily: fontFamily.medium,
-        color: "#FF553F",
+        color: "#2b8c91",
         letterSpacing: 1
     },
 

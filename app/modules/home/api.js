@@ -1,4 +1,5 @@
 import firebase from '../../config/firebase';
+import { isEmpty, stringObjectTogether, strcmp } from './utils/utils';
 
 auth = firebase.auth();
 database = firebase.database();
@@ -68,4 +69,44 @@ export function update(ref, child, data, successCB, errorCB) {
 
 export function exists(ref, child, item) {
 	return database.ref(ref).orderByChild(child).equalTo(item).once('value');
+}
+
+export function deleteItem(ref, key) {
+	return ref.child(key).remove(() => {
+		console.log("Removed " + ref + "/" + key);
+	});
+}
+
+export function addToExpired(ref, data, successCB, errorCB) {
+	insertReference = database.ref(ref).push();
+	insertReference.set(data)
+		.then((data) => successCB(data))
+		.catch((error) => errorCB(error)
+	);
+}
+
+export function getAll(ref, successCB, errorCB) {
+	database.ref(ref).on('value', (snapshot) => successCB(snapshot), (error) => errorCB(error));
+}
+
+export function getProxReminders(ref, successCB, errorCB, curLat, curLon) {
+	database.ref(ref).on('value', (snapshot) => successCB(snapshot, curLat, curLon), (error) => errorCB(error));
+}
+
+export function retrieve(url, method = 'GET', body: {}, headers: {}) {
+	config = { method: method };
+
+	if (strcmp(method, 'GET') == 0 || strcmp(method, 'HEAD')) {
+        url = url += '?' + stringObjectTogether(body, '=', '&');
+    } else {
+		if (!isEmpty(body)) {
+			config.body = body;
+		}
+	}
+
+	if (!isEmpty(headers)) {
+		config.headers = headers;
+	}
+
+	return fetch(url, config);
 }

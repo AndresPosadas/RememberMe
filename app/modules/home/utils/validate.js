@@ -32,8 +32,11 @@ export function validate(form) {
     keys.slice(0, length).map(field => {
         if (field !== "error"){
             var { type, value } = form[field];
-            if (isEmpty(value) && (type === 'title' || type === 'date' || type === 'time' || type === 'password')){
-                error[field] = 'Your ' + field + ' is required';
+			
+				console.log(JSON.stringify(form));
+			
+            if (isEmpty(value) && (type === 'amPm' || type === 'minute' || type === 'hour' || type === 'recurring' || type === 'title' || type === 'date' || type === 'time' || type === 'password')){
+                error[field] = field + ' is required';
                 success = false;
             }else{
                 error[field] = '';

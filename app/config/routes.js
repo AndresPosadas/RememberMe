@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from "react-native";
 import { Scene, Router, ActionConst, Stack, Modal, Tabs } from 'react-native-router-flux';
+import firebase from './firebase';
 
 //Splash Component
 import Splash from '../components/Splash/Splash';
@@ -11,18 +12,27 @@ import Register from '../modules/auth/scenes/Register';
 import CompleteProfile from '../modules/auth/scenes/CompleteProfile';
 import Login from '../modules/auth/scenes/Login';
 import ForgotPassword from '../modules/auth/scenes/ForgotPassword';
+
+//Home Scenes
 import Home from '../modules/home/scenes/Home';
 import Profile from '../modules/home/scenes/Profile';
 import EditProfile from '../modules/home/scenes/EditProfile';
 import Timed from '../modules/home/scenes/Timed';
+import ViewReminders from '../modules/home/scenes/ViewReminders';
+import EditReminder from '../modules/home/scenes/EditReminder';
+import Map from '../modules/home/scenes/Map';
+import Proximity from '../modules/home/scenes/Proximity';
 
 import { fontFamily, normalize } from "../styles/theme";
 
 export default class extends React.Component {
     constructor() {
         super();
+		user = firebase.auth().currentUser;
+		
         this.state = {
             isReady: false,
+			isLoggedIn: user ? true : false,
         }
     }
 
@@ -54,10 +64,14 @@ export default class extends React.Component {
                         <Scene key="Profile" component={Profile} title="My Profile" back/>
                         <Scene key="EditProfile" component={EditProfile} title="Edit Profile" back/>
                         <Scene key="Timed" component={Timed} title="Add Timed Reminder" back/>
+						<Scene key="ViewReminders" component={ViewReminders} title="My Reminders" back/>
+						<Scene key="EditReminder" component={EditReminder} title="Edit Reminder" back/>
+						<Scene key="Map" component={Map} title="View Map" back/>
+                        <Scene key="Proximity" component={Proximity} title="Add Proximity Reminder" back/>
                     </Stack>
                 </Scene>
             </Router>
-        )
+        );
     }
 }
 

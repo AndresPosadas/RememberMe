@@ -21,7 +21,7 @@ const fields = [
 	{
 		key: 'email',
 		label: "Email",
-		placeholder: "new value or leave blank",
+		placeholder: "",
 		autoFocus: false,
 		secureTextEntry: false,
 		value: "",
@@ -30,7 +30,7 @@ const fields = [
 	{
 		key: 'username',
 		label: "Username",
-		placeholder: "new value or leave blank",
+		placeholder: "",
 		autoFocus: false,
 		secureTextEntry: false,
 		value: "",
@@ -39,7 +39,7 @@ const fields = [
 	{
 		key: 'photoURL',
 		label: "Photo URL",
-		placeholder: "new value or leave blank.",
+		placeholder: "",
 		autoFocus: false,
 		secureTextEntry: false,
 		value: "",
@@ -47,8 +47,8 @@ const fields = [
 	},
 	{
 		key: 'password',
-		label: "Password",
-		placeholder: "authorize change with password",
+		label: "Re-enter Password",
+		placeholder: "",
 		autoFocus: false,
 		secureTextEntry: true,
 		value: "",

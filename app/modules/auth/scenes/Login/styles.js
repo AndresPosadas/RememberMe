@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
         marginBottom: padding,
         fontSize: fontSize.regular,
         fontFamily: fontFamily.medium,
+		color: "#3ad0d8"
     }
 });
 
