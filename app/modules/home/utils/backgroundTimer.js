@@ -29,6 +29,8 @@ function deg2rad(deg) {
 function calculateAndHandleDistance(snapshot, curLat, curLon) {
 	
 	if (snapshot.val() !== null) {
+		
+		console.log(JSON.stringify(snapshot));
 			
 		snapshot.forEach((childSnapshot) => {
 				
@@ -38,7 +40,7 @@ function calculateAndHandleDistance(snapshot, curLat, curLon) {
 						
 			console.log("DIFF: " + diff);
 				
-			if(diff <= 100.00 && value.type === 'proximity'){
+			if(diff <= 100.00){
 				console.log("REMINDER: " + JSON.stringify(value));
 				pushNotifications.localNotification({reminderTitle: value.title, description: value.description, reminderType: 'proximity'});
 				value.type = 'expired';
