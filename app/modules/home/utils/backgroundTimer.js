@@ -126,11 +126,11 @@ export function setTimer() {
 				
 						if(diff <= 30 && diff >= -30){
 							pushNotifications.localNotification({reminderTitle: value.title, description: value.description, reminderType: 'timed'});
-							value.type = 'expired';
 							childSnapshot.ref.remove()
 							.then( () => {
 								value.type = 'expired';
 								addToExpired(this.expiredRef, value, (data) => {
+									potentialValue.type = 'timed';
 									if(value.recurring === 'yes') {
 										appendToList(this.timedRef, 'reminders/timed', potentialValue, () => {
 											console.log("Recurring reminder set.");
@@ -220,12 +220,12 @@ export function setTimerIOS() {
 				
 						if(diff <= 30 && diff >= -30){
 							pushNotifications.localNotification({reminderTitle: value.title, description: value.description, reminderType: 'timed'});
-							value.type = 'expired';
 							childSnapshot.ref.remove()
 							.then( () => {
 								value.type = 'expired';
 								addToExpired(this.expiredRef, value, (data) => {
 									if(value.recurring === 'yes') {
+										potentialValue.type = 'timed';
 										appendToList(this.timedRef, 'reminders/timed', potentialValue, () => {
 											console.log("Recurring reminder set.");
 										}, (error) => Alert.alert( 'Uh-oh!', error.message ))
