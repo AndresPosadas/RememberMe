@@ -45,7 +45,7 @@ class Reminder extends React.Component {
 						<Text style={styles.reminderText}>Title: </Text>
 						<Text style={styles.reminderText}>{reminder.title}</Text>
 					</View>
-					<View style={{flexDirection: "row"}}>
+					<View>
 						<Text style={styles.reminderText}>Body: </Text>
 						<Text style={styles.reminderText}>{reminder.description}</Text>
 					</View>
@@ -74,14 +74,6 @@ class Reminder extends React.Component {
 				<View style={styles.expiredButtonContainer}>
 					<Button
 						raised
-						title={"EDIT"}
-						borderRadius={4}
-						containerViewStyle={styles.containerView}
-						buttonStyle={styles.button}
-						textStyle={styles.buttonText}
-						onPress={this.onEdit.bind(this)}/>
-					<Button
-						raised
 						title={"DELETE"}
 						borderRadius={4}
 						containerViewStyle={styles.containerView}
@@ -101,7 +93,7 @@ class Reminder extends React.Component {
 						<Text style={styles.reminderText}>Title: </Text>
 						<Text style={styles.reminderText}>{reminder.title}</Text>
 					</View>
-					<View style={{flexDirection: "row"}}>
+					<View>
 						<Text style={styles.reminderText}>Body: </Text>
 						<Text style={styles.reminderText}>{reminder.description}</Text>
 					</View>

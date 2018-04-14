@@ -78,8 +78,6 @@ class ViewReminders extends React.Component {
 			var proxReminders = this.state.proxReminders;
 			var timedReminders = this.state.timedReminders;
 			var expiredReminders = this.state.expiredReminders;
-				
-			//Alert.alert("Timed", JSON.stringify(returnTimed));
 
 			return(
 			<View>

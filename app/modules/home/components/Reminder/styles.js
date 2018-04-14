@@ -37,7 +37,8 @@ var styles = StyleSheet.create({
   
   reminderText: {
 	color: "gray",
-	fontSize: fontSize.small
+	fontSize: fontSize.small,
+	flexWrap: 'wrap'
   },
 
   button:{
