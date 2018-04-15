@@ -29,8 +29,6 @@ function deg2rad(deg) {
 function calculateAndHandleDistance(snapshot, curLat, curLon) {
 	
 	if (snapshot.val() !== null) {
-		
-		console.log(JSON.stringify(snapshot));
 			
 		snapshot.forEach((childSnapshot) => {
 				
@@ -41,7 +39,6 @@ function calculateAndHandleDistance(snapshot, curLat, curLon) {
 			console.log("DIFF: " + diff);
 				
 			if(diff <= 100.00){
-				console.log("REMINDER: " + JSON.stringify(value));
 				pushNotifications.localNotification({reminderTitle: value.title, description: value.description, reminderType: 'proximity'});
 				value.type = 'expired';
 				childSnapshot.ref.remove()
@@ -65,6 +62,15 @@ export function setTimer() {
 		
 		BackgroundTimer.setInterval(() => {
 			
+			if(firebase.auth().currentUser === null){
+				if(flag === true) {
+					pushNotifications.localNotification({reminderTitle: "Login required.", description: "RemindMe services suspended until login.", reminderType: 'RemindMe'});
+				}
+				flag = false;
+			} else {
+				
+			flag = true;
+			
 			navigator.geolocation.getCurrentPosition(
 				(position) => {
 					
@@ -76,15 +82,6 @@ export function setTimer() {
 				(error) => Alert.alert('Geolocation Error', error.message),
 				{ enableHighAccuracy: true, timeout: 20000 },
 			);
-			
-			if(firebase.auth().currentUser === null){
-				if(flag === true) {
-					pushNotifications.localNotification({reminderTitle: "Login required.", description: "Please sign in again to continue using RemindMe services.", reminderType: 'RemindMe'});
-				}
-				flag = false;
-			} else {
-				
-			flag = true;
 					
 			this.timedRef = 'users/' + firebase.auth().currentUser.uid;
 			this.expiredRef = 'users/' + firebase.auth().currentUser.uid + '/reminders/expired';
@@ -129,11 +126,11 @@ export function setTimer() {
 				
 						if(diff <= 30 && diff >= -30){
 							pushNotifications.localNotification({reminderTitle: value.title, description: value.description, reminderType: 'timed'});
-							value.type = 'expired';
 							childSnapshot.ref.remove()
 							.then( () => {
 								value.type = 'expired';
 								addToExpired(this.expiredRef, value, (data) => {
+									potentialValue.type = 'timed';
 									if(value.recurring === 'yes') {
 										appendToList(this.timedRef, 'reminders/timed', potentialValue, () => {
 											console.log("Recurring reminder set.");
@@ -161,15 +158,27 @@ export function setTimerIOS() {
 			
 			if(firebase.auth().currentUser === null){
 				if(flag === true) {
-					pushNotifications.localNotification({reminderTitle: "Login required.", description: "Please sign in again to continue using RemindMe services.", reminderType: 'RemindMe'});
+					pushNotifications.localNotification({reminderTitle: "Login required.", description: "RemindMe services suspended until login.", reminderType: 'RemindMe'});
 				}
 				flag = false;
 			} else {
 				
 			flag = true;
+			
+			navigator.geolocation.getCurrentPosition(
+				(position) => {
 					
-			this.timedRef = 'users/' + firebase.auth().currentUser.uid + '/reminders/timed';
-			this.expiredRef = 'users/' + firebase.auth().currentUser.uid, 'reminders/expired';
+					console.log('LAT: ' + position.coords.latitude);
+					console.log('LON: ' + position.coords.longitude);
+					
+					getProxReminders('users/' + firebase.auth().currentUser.uid + '/reminders/proximity', calculateAndHandleDistance, onError, position.coords.latitude, position.coords.longitude);
+				},
+				(error) => Alert.alert('Geolocation Error', error.message),
+				{ enableHighAccuracy: true, timeout: 20000 },
+			);
+					
+			this.timedRef = 'users/' + firebase.auth().currentUser.uid;
+			this.expiredRef = 'users/' + firebase.auth().currentUser.uid + '/reminders/expired';
 			
 			// Gets current day
 			this.currentdate = new Date(); 
@@ -181,7 +190,7 @@ export function setTimerIOS() {
 			
 			console.log("DATE: " + this.dateString);
 	
-			exists(timedRef, 'date', this.dateString)
+			exists(timedRef + '/reminders/timed', 'date', this.dateString)
 			.then((snapshot) => {
 		
 				if (snapshot.val() !== null) {
@@ -196,9 +205,11 @@ export function setTimerIOS() {
 					snapshot.forEach((childSnapshot) => {
 				
 						var value = childSnapshot.val();
-						var potentialDate = moment(value.date, 'MM/DD/YYYY').add(7, 'days');
+						var potentialDate = moment(value.date, 'MM/DD/YYYY');
+						potentialDate = moment(potentialDate, 'MM/DD/YYYY').add(7, 'days');
 						var potentialValue = value;
 						potentialValue.date = potentialDate.format('MM/DD/YYYY');
+						potentialValue.type = 'timed';
 				
 						var reminderTime = moment(value.time, 'hh:mm a');
 						var curTime = moment(this.timeString, 'HH:mm:ss');
@@ -211,9 +222,11 @@ export function setTimerIOS() {
 							pushNotifications.localNotification({reminderTitle: value.title, description: value.description, reminderType: 'timed'});
 							childSnapshot.ref.remove()
 							.then( () => {
-								addToExpired(expiredRef, value, (data) => {
+								value.type = 'expired';
+								addToExpired(this.expiredRef, value, (data) => {
 									if(value.recurring === 'yes') {
-										appendToList(timedRef, potentialValue, () => {
+										potentialValue.type = 'timed';
+										appendToList(this.timedRef, 'reminders/timed', potentialValue, () => {
 											console.log("Recurring reminder set.");
 										}, (error) => Alert.alert( 'Uh-oh!', error.message ))
 									} else {
