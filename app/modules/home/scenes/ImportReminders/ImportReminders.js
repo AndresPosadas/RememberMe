@@ -74,6 +74,7 @@ class ViewReminders extends React.Component {
 								newObj.date = dateString;
 								newObj.time = date.getHours() + ":" + date.getMinutes();
 								newObj.time = moment(newObj.time, 'HH:mm').format('hh:mm a');
+								newObj.address = data.location;
 								if(newObj.time.charAt(0) == '0'){
 									newObj.time = newObj.time.substring(1);
 								}
