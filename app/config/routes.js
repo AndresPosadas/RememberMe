@@ -22,6 +22,7 @@ import ViewReminders from '../modules/home/scenes/ViewReminders';
 import EditReminder from '../modules/home/scenes/EditReminder';
 import Map from '../modules/home/scenes/Map';
 import Proximity from '../modules/home/scenes/Proximity';
+import ImportReminders from '../modules/home/scenes/ImportReminders';
 
 import { fontFamily, normalize } from "../styles/theme";
 
@@ -68,6 +69,7 @@ export default class extends React.Component {
 						<Scene key="EditReminder" component={EditReminder} title="Edit Reminder" back/>
 						<Scene key="Map" component={Map} title="View Map" back/>
                         <Scene key="Proximity" component={Proximity} title="Add Proximity Reminder" back/>
+						<Scene key="ImportReminders" component={ImportReminders} title="Import Reminders" back/>
                     </Stack>
                 </Scene>
             </Router>

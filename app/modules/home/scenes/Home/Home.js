@@ -6,6 +6,7 @@ import { setTimer, clearTimer, setTimerIOS, clearTimerIOS } from '../../utils/ba
 import styles from "./styles";
 import { signOut, exists } from '../../api';
 import { theme } from '../../../auth/index';
+import RNCalendarEvents from 'react-native-calendar-events';
 
 const { color } = theme;
 
@@ -22,7 +23,15 @@ class Home extends React.Component {
 			setTimerIOS();
 		} else {
 			this.intervalId = setTimer();
-		}		
+		}	
+		var currentDate = new Date();
+		var futureDate = new Date();
+		futureDate.setFullYear(futureDate.getFullYear() + 3);
+		currentDate = currentDate.toISOString();
+		futureDate.toISOString();
+		RNCalendarEvents.fetchAllEvents(currentDate, futureDate)
+		.then((result) => console.log(JSON.stringify(result)))
+		.catch((error) => console.log(error.message));
 	}
 	
 	componentWillUnmount() {	
@@ -51,7 +60,7 @@ class Home extends React.Component {
     }
 
     importReminders() {
-        Alert.alert('You tried to import reminders.');
+        Actions.ImportReminders();
     }
 
     // Communicates with Firebase API...calls onSuccess if signout worked

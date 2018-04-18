@@ -2,6 +2,7 @@ package com.remindme;
 
 import android.app.Application;
 import com.airbnb.android.react.maps.MapsPackage;
+import com.calendarevents.CalendarEventsPackage;
 
 import com.facebook.react.ReactApplication;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -31,7 +32,8 @@ public class MainApplication extends Application implements ReactApplication {
             new VectorIconsPackage(),
             new ReactNativePushNotificationPackage(),
             new BackgroundTimerPackage(),
-			new MapsPackage()
+			new MapsPackage(),
+			new CalendarEventsPackage()
       );
     }
 

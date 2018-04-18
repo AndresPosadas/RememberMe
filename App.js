@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import Router from './app/config/routes'
 import { pushNotifications } from './services';
+import RNCalendarEvents from 'react-native-calendar-events';
 
 function cacheFonts(fonts) {
     return fonts.map(font => Font.loadAsync(font));
 }
 
+RNCalendarEvents.authorizeEventStore();
 pushNotifications.configure();
 console.disableYellowBox = true;
 

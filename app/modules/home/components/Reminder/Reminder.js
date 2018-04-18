@@ -25,6 +25,10 @@ class Reminder extends React.Component {
 		);
 	}
 	
+	onAdd() {
+		this.props.onAdd(this.props.item, this.props.index);
+	}
+	
 	onSuccess() {
 		Alert.alert("Success!", "Reminder was ");
 	}
@@ -34,7 +38,13 @@ class Reminder extends React.Component {
 	}
 
 	render() {
-		var reminder = this.props.item.val();
+		var reminder;
+		
+		if(this.props.item.val === undefined){
+			reminder = this.props.item;
+		} else {
+			reminder = this.props.item.val();
+		}
 		
 		if(reminder.type === 'expired') {
 			
@@ -84,8 +94,55 @@ class Reminder extends React.Component {
 			</View>
 			);
 			
-		} else {
+		} else if (this.props.stat && this.props.stat === "import") {
 			
+			return (
+			<View style={styles.container}>
+				<View style={styles.textContainer}>
+					<View style={{flexDirection: "row"}}>
+						<Text style={styles.reminderText}>Title: </Text>
+						<Text style={styles.reminderText}>{reminder.title}</Text>
+					</View>
+					<View>
+						<Text style={styles.reminderText}>Body: </Text>
+						<Text style={styles.reminderText}>{reminder.description}</Text>
+					</View>
+					{
+						(!!reminder.date) &&
+						<View style={{flexDirection: "row"}}>
+							<Text style={styles.reminderText}>Date: </Text>
+							<Text style={styles.reminderText}>{reminder.date}</Text>
+						</View>
+					}
+					{
+						(!!reminder.time) &&
+						<View style={{flexDirection: "row"}}>
+							<Text style={styles.reminderText}>Time: </Text>
+							<Text style={styles.reminderText}>{reminder.time}</Text>
+						</View>
+					}
+					{
+						(!!reminder.recurring) &&
+						<View style={{flexDirection: "row"}}>
+							<Text style={styles.reminderText}>Recurring: </Text>
+							<Text style={styles.reminderText}>{reminder.recurring}</Text>
+						</View>
+					}
+				</View>
+				<View style={styles.buttonContainer}>
+					<Button
+						raised
+						title={"ADD"}
+						borderRadius={4}
+						containerViewStyle={styles.containerView}
+						buttonStyle={styles.button}
+						textStyle={styles.buttonText}
+						onPress={this.onAdd.bind(this)}/>
+				</View>
+			</View>
+		);
+		} else {
+						
 			return (
 			<View style={styles.container}>
 				<View style={styles.textContainer}>
