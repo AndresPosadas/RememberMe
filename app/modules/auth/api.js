@@ -8,7 +8,7 @@ export function createUser(data, successCB, errorCB) {
 		if (snapshot.val() == null) {
 			const currentUser = auth.currentUser;
 
-			currentUser.updateProfile({ username: data.username, photoURL: data.photo })
+			currentUser.updateProfile({ displayName: data.username, photoURL: data.photo })
 				.then(() => {
 					database.ref('users').child(data.uid).update({ ...data })
 						.then(() => successCB())
