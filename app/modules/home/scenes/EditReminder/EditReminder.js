@@ -46,6 +46,27 @@ const fields = [
 	}
 ];
 
+const fieldsProx = [
+	{
+		key: "title",
+		label: "Reminder Title",
+		placeholder: "",
+		autoFocus: false,
+		secureTextEntry: false,
+		value: "",
+		type: "title"
+	},
+	{
+		key: "description",
+		label: "Description",
+		placeholder: "",
+		autoFocus: false,
+		secureTextEntry: false,
+		value: "",
+		type: "description"
+	}
+];
+
 const error = {
 	general: "",
 	title: "",
@@ -87,21 +108,40 @@ class EditReminder extends React.Component {
 	}
 
 	render() {
-		return (
-			<ScrollView>
+		
+		if(this.props.type === 'timed'){
+			return (
+			<ScrollView style={{backgroundColor: "white"}}>
 				<AuthContainer>
 					<Form fields={fields}
 						showLabel={true}
 						onSubmit={this.onSubmit.bind(this)}
 						buttonTitle={"EDIT REMINDER"}
 						error={this.state.error}
-						showRecurring={!this.props.isProximity}
+						showRecurring={true}
 						isEditing={true}
 						original={this.props.reminder.val()}
 					/>
 				</AuthContainer>
 			</ScrollView>
 		);
+		} else {
+			return (
+			<ScrollView style={{backgroundColor: "white"}}>
+				<AuthContainer>
+					<Form fields={fieldsProx}
+						showLabel={true}
+						onSubmit={this.onSubmit.bind(this)}
+						buttonTitle={"EDIT REMINDER"}
+						error={this.state.error}
+						showRecurring={false}
+						isEditing={true}
+						original={this.props.reminder.val()}
+					/>
+				</AuthContainer>
+			</ScrollView>
+		);
+		}
 	}
 }
 
