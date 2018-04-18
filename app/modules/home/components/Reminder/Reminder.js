@@ -10,7 +10,15 @@ class Reminder extends React.Component {
 	}
 	
 	onEdit() {
-		Actions.EditReminder({reminder: this.props.item, isProximity: false});
+		var reminder;
+		
+		if(this.props.item.val === undefined){
+			reminder = this.props.item;
+		} else {
+			reminder = this.props.item.val();
+		}
+		
+		Actions.EditReminder({reminder: this.props.item, reminderType: reminder.type});
 	}
 	
 	onDelete() {
