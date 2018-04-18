@@ -45,7 +45,7 @@ class Form extends React.Component {
     onSubmit() {
         var data = this.state;
 		
-		if(this.props.original) {
+		if(this.props.original && this.props.showRecurring) {
 			var original = this.props.original;		
 			var bits = original.time.split(/[\s:]+/)
 		
