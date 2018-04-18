@@ -85,7 +85,7 @@ export function setTimer() {
 					
 						getProxReminders('users/' + firebase.auth().currentUser.uid + '/reminders/proximity', calculateAndHandleDistance, onError, position.coords.latitude, position.coords.longitude);
 					}, 
-					(error) => Alert.alert('Geolocation Error', error.message),
+					(error) => console.log('Geolocation Error', error.message),
 					{ enableHighAccuracy: false, timeout: 50000, maximumAge: 20000 });
 				}
 			});
