@@ -3,7 +3,7 @@ import { pushNotifications } from '../../../../services';
 import moment from 'moment';
 import { exists, deleteItem, addToExpired, appendToList, getProxReminders } from '../api';
 import firebase from "../../../config/firebase";
-import { Platform, Alert } from 'react-native';
+import { Platform, Alert, PermissionsAndroid } from 'react-native';
 
 const database = firebase.database();
 var flag = true;
@@ -71,17 +71,23 @@ export function setTimer() {
 				
 			flag = true;
 			
-			navigator.geolocation.getCurrentPosition(
-				(position) => {
-					
-					console.log('LAT: ' + position.coords.latitude);
-					console.log('LON: ' + position.coords.longitude);
-					
-					getProxReminders('users/' + firebase.auth().currentUser.uid + '/reminders/proximity', calculateAndHandleDistance, onError, position.coords.latitude, position.coords.longitude);
-				},
-				(error) => Alert.alert('Geolocation Error', error.message),
-				{ enableHighAccuracy: true, timeout: 20000 },
-			);
+      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
+              'title': 'RemindMe App Location Permission',
+              'message': 'RemindMe needs access to your location so that you can use proximity reminders.',
+          })
+          .then((granted) => {
+              if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                  navigator.geolocation.getCurrentPosition((position) => {
+
+                      console.log('LAT: ' + position.coords.latitude);
+                      console.log('LON: ' + position.coords.longitude);
+
+                      getProxReminders('users/' + firebase.auth().currentUser.uid + '/reminders/proximity', calculateAndHandleDistance, onError, position.coords.latitude, position.coords.longitude);
+                  },
+                  (error) => Alert.alert('Geolocation Error', error.message),
+                  { enableHighAccuracy: false, timeout: 20000, maximumAge: 20000 });
+              }
+          });
 					
 			this.timedRef = 'users/' + firebase.auth().currentUser.uid;
 			this.expiredRef = 'users/' + firebase.auth().currentUser.uid + '/reminders/expired';
@@ -113,7 +119,7 @@ export function setTimer() {
 						var value = childSnapshot.val();
 						var potentialDate = moment(value.date, 'MM/DD/YYYY');
 						potentialDate = moment(potentialDate, 'MM/DD/YYYY').add(7, 'days');
-						var potentialValue = value;
+            var potentialValue = Object.assign({}, value);
 						potentialValue.date = potentialDate.format('MM/DD/YYYY');
 						potentialValue.type = 'timed';
 				
@@ -124,7 +130,7 @@ export function setTimer() {
 						
 						console.log("DIFF: " + diff);
 				
-						if(diff <= 30 && diff >= -30){
+						if(diff <= 1 && diff >= -1){
 							pushNotifications.localNotification({reminderTitle: value.title, description: value.description, reminderType: 'timed'});
 							childSnapshot.ref.remove()
 							.then( () => {
@@ -149,7 +155,7 @@ export function setTimer() {
 			}).catch((error) => Alert.alert('Uh-oh!', error.message));
 			
 			}
-		}, 15000);
+		}, 1000);
 }
 
 export function setTimerIOS() {
