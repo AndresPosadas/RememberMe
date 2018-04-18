@@ -109,7 +109,7 @@ class EditReminder extends React.Component {
 
 	render() {
 		
-		if(this.props.type === 'timed'){
+		if(this.props.reminderType === 'timed'){
 			return (
 			<ScrollView style={{backgroundColor: "white"}}>
 				<AuthContainer>
