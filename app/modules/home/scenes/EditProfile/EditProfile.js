@@ -85,7 +85,7 @@ class EditProfile extends React.Component {
 
 	onSuccess() {
 		Alert.alert('Profile updated.');
-		Actions.Profile();
+		Actions.pop();
 	}
 
 	onError(error) {
