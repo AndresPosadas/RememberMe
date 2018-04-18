@@ -22,6 +22,7 @@ import ViewReminders from '../modules/home/scenes/ViewReminders';
 import EditReminder from '../modules/home/scenes/EditReminder';
 import Map from '../modules/home/scenes/Map';
 import Proximity from '../modules/home/scenes/Proximity';
+import Imports from '../modules/home/scenes/Imports';
 
 import { fontFamily, normalize } from "../styles/theme";
 
@@ -61,6 +62,7 @@ export default class extends React.Component {
 
                     <Stack key="Main" initial={this.state.isLoggedIn}>
                         <Scene key="Home" component={Home} title="Home" initial={true} type={ActionConst.REPLACE}/>
+                        <Scene key="Imports" component={Imports} title="Import Events" back/>
                         <Scene key="Profile" component={Profile} title="My Profile" back/>
                         <Scene key="EditProfile" component={EditProfile} title="Edit Profile" back/>
                         <Scene key="Timed" component={Timed} title="Add Timed Reminder" back/>

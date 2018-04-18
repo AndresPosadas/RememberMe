@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Router from './app/config/routes'
-import { pushNotifications } from './services';
+import { configure } from './services/pushNotifications';
 
 function cacheFonts(fonts) {
     return fonts.map(font => Font.loadAsync(font));
 }
 
-pushNotifications.configure();
+configure();
 console.disableYellowBox = true;
 
 export default class App extends Component {

@@ -1,8 +1,10 @@
 import React from 'react';
+import RNCalendarEvents from 'react-native-calendar-events';
 var { View, Alert, Platform } = require('react-native');
 import { Button } from 'react-native-elements';
 import { Actions } from 'react-native-router-flux';
 import { setTimer, clearTimer, setTimerIOS, clearTimerIOS } from '../../utils/backgroundTimer';
+import moment from 'moment';
 import styles from "./styles";
 import { signOut, exists } from '../../api';
 import { theme } from '../../../auth/index';
@@ -51,7 +53,7 @@ class Home extends React.Component {
     }
 
     importReminders() {
-        Alert.alert('You tried to import reminders.');
+        Actions.Imports();
     }
 
     // Communicates with Firebase API...calls onSuccess if signout worked
